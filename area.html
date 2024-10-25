@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ area_name }} Area Data</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/area_styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/area/NORTH">North</a></li>
+                <li><a href="/area/SOUTH">South</a></li>
+                <li><a href="/area/HIGH">High</a></li>
+                <li><a href="/area/ATOP">Atop</a></li>
+            </ul>
+        </nav>
+        <h1>{{ area_name }} Area METAR and PIREP Data</h1>
+        <div class="zulu-time">Zulu Time: {{ zulu_time }}</div>
+    </header>
+
+    <main class="container">
+        <section class="data-section">
+            <h2>METAR Stations</h2>
+            <table class="metar-table">
+                <thead>
+                    <tr>
+                        <th>NAS ID</th>
+                        <th>Visibility (mi)</th>
+                        <th>Ceiling (ft AGL)</th>
+                        <th>Weather String</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for airport, station in stations %}
+                    <tr>
+                        <td>{{ airport['NAS ID'] }}</td>
+                        <td>{{ station['visibility'] }}</td>
+                        <td>{{ station['ceiling_altitude'] }}</td>
+                        <td>{{ station['wx_string'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+
+        <section class="data-section">
+            <h2>PIREP Data</h2>
+            <table class="pirep-table">
+                <thead>
+                    <tr>
+                        <th>Location</th>
+                        <th>Time</th>
+                        <th>Type</th>
+                        <th>Alt</th>
+                        <th>ACFT</th>
+                        <th>PIREP RMK</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for pirep in pireps %}
+                    <tr>
+                        <td>{{ pirep['Location'] }}</td>
+                        <td>{{ pirep['Time'] }}</td>
+                        <td>{{ pirep['Type'] }}</td>
+                        <td>{{ pirep['ALT'] }}</td>
+                        <td>{{ pirep['ACFT'] }}</td>
+                        <td>{{ pirep['PIREP Remarks'] }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/area_script.js') }}"></script>
+</body>
+</html>

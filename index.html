@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PIREP Application</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+</head>
+<body>
+    <header>
+        <nav class="nav">
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/area/NORTH">North</a></li>
+                <li><a href="/area/SOUTH">South</a></li>
+                <li><a href="/area/HIGH">High</a></li>
+                <li><a href="/area/ATOP">Atop</a></li>
+            </ul>
+        </nav>
+        <h1>Welcome to the PIREP Application</h1>
+        <div class="zulu-time">Current Zulu Time: {{ zulu_time }}</div>
+    </header>
+    <main class="container">
+        <!-- Loop through each area and display the PIREP requirement status for each station -->
+        {% for area, data in areas_data.items() %}
+            <h2>{{ area }} Area</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>NAS ID</th>
+                        <th>Airport Name</th>
+                        <th>Latest PIREP Time</th>
+                        <th>Requirement</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for station, status in data['pirep_status'].items() %}
+                        <tr>
+                            <td>{{ station }}</td>
+                            {% for airport in config.airport_data %}
+                                {% if airport['NAS ID'] == station %}
+                                    <td>{{ airport['Airport Name'] }}</td>
+                                {% endif %}
+                            {% endfor %}
+                            <td>
+                                {% if status['Latest PIREP'] %}
+                                    {{ status['Latest PIREP']['Time'] }}
+                                {% else %}
+                                    No PIREP Found
+                                {% endif %}
+                            </td>
+                            <td>{{ status['Requirement'] }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% endfor %}
+    </main>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
