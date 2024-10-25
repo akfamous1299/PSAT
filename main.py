@@ -45,9 +45,10 @@ def index():
         for station in area_stations:
             # Filter PIREPs for the current station
             station_pireps = [pirep for pirep in area_pireps if pirep['Location'] == station[0]['NAS ID']]
-
+            
             # Sort PIREPs by time in descending order (newest first)
             station_pireps.sort(key=lambda x: x['Time'], reverse=True)
+            
 
             # Check if there are any PIREPs for the station
             if station_pireps:
@@ -56,7 +57,8 @@ def index():
 
                 # Calculate the time difference between now and the latest PIREP
                 now = datetime.now(pytz.utc)
-                pirep_time = datetime.strptime(latest_pirep['Time'], "%Y-%m-%d %H:%M:%S")
+                pirep_time = datetime.strptime(latest_pirep['Time'], "%H:%M").replace(tzinfo=pytz.utc)
+                
                 time_diff = (now - pirep_time).total_seconds() / 3600  # Convert to hours
 
                 # Determine if a new PIREP is required (every hour)
@@ -70,13 +72,13 @@ def index():
 
         # Store both METAR and PIREP data in the dictionary
         areas_data[area] = {
-            'tations': area_stations,
+            'stations': area_stations,
             'pirep_status': station_pirep_status
         }
 
     # Get Zulu time for the display
     now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M:%S Z")
+    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the index.html template with all the data
     return render_template('index.html', zulu_time=zulu_time, areas_data=areas_data)
@@ -109,7 +111,7 @@ def area(area_name):
 
     # Get Zulu time
     now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M:%S Z")
+    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the area.html template with METAR and PIREP data
     return render_template('area.html', zulu_time=zulu_time, area_name=area_name, stations=area_stations, pireps=area_pireps)

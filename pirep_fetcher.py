@@ -133,7 +133,7 @@ def fetch_pirep_data():
                         })
                     break
 
-            print(pireps)
+            #print(pireps)
 
         except ValueError as ve:
             print(f"Could not convert string to float: {ve}, row: {row}")  # Debugging
