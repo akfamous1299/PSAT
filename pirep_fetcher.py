@@ -23,18 +23,29 @@ def find_polygons(lat, lon, alt):
 
     for area_name, area_data in config.areas.items():
         for sector_number, sector_polygon in area_data["sectors"].items():
+            #print(f"Testing {area_name},{sector_number}")
             poly = Polygon(sector_polygon)
             if poly.contains(point):
                 found_poly.append(sector_number)
+                #print(found_poly)
+        
 
     if len(found_poly) > 1:
         if alt >= 29000:
-            area = max(found_poly)
+            found_poly = max(found_poly)
         else:
-            area = min(found_poly)
+            found_poly = min(found_poly)
+    else:
+        found_poly = found_poly[0]
 
+    for area_name, area_data in config.areas.items():
+        for sector_number, sector_polygon in area_data["sectors"].items():
+            if found_poly == sector_number:
+                area = area_name
+                break
 
-    return area
+    #print(f"found in {found_poly} in {area}")
+    return found_poly
 
 def extract_apt(raw_text):
     match = raw_text.partition(" ")[0]
@@ -54,12 +65,11 @@ def extract_rmk(raw_text):
     return None
 
 def extract_loc(raw_text):
-    idx1 = raw_text.find("/OV")
-    idx2 = raw_text.find("/TM")
-    match = raw_text[idx1 + len("/OV") + 1: idx2]
+    match = raw_text.partition(" U")[0]
     if match:
         return match
     return None
+
 
 def format_time(iso_time):
     #Convert ISO 8601 time string to 'HH:MM' format.
@@ -118,11 +128,12 @@ def fetch_pirep_data():
                 if sector_number in area_data["sectors"]:
 
                     pireps.append({
+                            "Location": loc,
                             "Receipt Time": row['receipt_time'],
+                            "RPT_TIME": row["observation_time"],
                             "Time": formatted_observation_time,
                             "Type": row['report_type'],
                             "ACFT": row['aircraft_ref'],
-                            "Location": loc,
                             "ALT": alt,
                             "PIREP Remarks": rmk,
                             "WX String": row['wx_string'],
@@ -131,6 +142,7 @@ def fetch_pirep_data():
                             "APT": apt, 
                             "Sector": sector_number
                         })
+                    print(f"PIREP found in:{area_name}")
                     break
 
             #print(pireps)

@@ -8,6 +8,8 @@
 </head>
 <body>
     <header>
+        <h3>PSAT</h3>
+        <div class="zulu-time" id="time">Current Zulu Time: {{ zulu_time }}</div>
         <nav class="nav">
             <ul>
                 <li><a href="/">OMIC</a></li>
@@ -16,11 +18,8 @@
                 <li><a href="/area/HIGH">High</a></li>
                 <li><a href="/area/ATOP">Atop</a></li>
             </ul>
-        </nav>
-        <h1>{{ area_name }} Area METAR and PIREP Data</h1>
-        <div class="zulu-time">Zulu Time: {{ zulu_time }}</div>
+        </nav> 
     </header>
-
     <main class="container">
         <section class="data-section">
             <h2>METAR Stations</h2>
@@ -75,6 +74,6 @@
         </section>
     </main>
 
-    <script src="{{ url_for('static', filename='js/area_script.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

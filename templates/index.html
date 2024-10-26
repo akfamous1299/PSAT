@@ -8,6 +8,8 @@
 </head>
 <body>
     <header>
+        <h3>PSAT</h3>
+        <div class="zulu-time" id="time">Current Zulu Time: {{ zulu_time }}</div>
         <nav class="nav">
             <ul>
                 <li><a href="/">OMIC</a></li>
@@ -16,9 +18,7 @@
                 <li><a href="/area/HIGH">High</a></li>
                 <li><a href="/area/ATOP">Atop</a></li>
             </ul>
-        </nav>
-        <h1>PSAT</h1>
-        <div class="zulu-time">Current Zulu Time: {{ zulu_time }}</div>
+        </nav> 
     </header>
     <main class="container">
         <!-- Loop through each area and display the PIREP requirement status for each station -->
@@ -32,7 +32,7 @@
                         <th>Requirement</th>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody id="stations-{{ area }}">
                     {% for station, status in data['pirep_status'].items() %}
                         <tr>
                             <td>{{ station }}</td>
@@ -40,7 +40,7 @@
                                 {% if status['Latest PIREP'] %}
                                     {{ status['Latest PIREP']['Time'] }}
                                 {% else %}
-                                    No PIREP Found
+                                    None
                                 {% endif %}
                             </td>
                             <td>{{ status['Requirement'] }}</td>

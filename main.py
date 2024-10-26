@@ -4,6 +4,7 @@ from metar_fetcher import fetch_metar_data
 from pirep_fetcher import fetch_pirep_data
 from datetime import datetime
 import pytz
+import jsonify
 
 app = Flask(__name__)
 
@@ -57,8 +58,8 @@ def index():
 
                 # Calculate the time difference between now and the latest PIREP
                 now = datetime.now(pytz.utc)
-                pirep_time = datetime.strptime(latest_pirep['Time'], "%H:%M").replace(tzinfo=pytz.utc)
-                
+                pirep_time = datetime.strptime(latest_pirep['RPT_TIME'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=pytz.utc)
+
                 time_diff = (now - pirep_time).total_seconds() / 3600  # Convert to hours
 
                 # Determine if a new PIREP is required (every hour)
@@ -82,6 +83,25 @@ def index():
 
     # Render the index.html template with all the data
     return render_template('index.html', zulu_time=zulu_time, areas_data=areas_data)
+
+@app.route('/fetch-updated-data')
+def fetch_updated_data():
+    # Call your existing functions to fetch METAR and PIREP data
+    stations = fetch_metar_data()
+    pireps = fetch_pirep_data()
+    
+    areas_data = {}  # Similar logic as in your index route to build areas_data
+
+    # Build areas_data similar to the index function here...
+
+    # Get Zulu time for the response
+    now = datetime.now(pytz.utc)
+    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+
+    return {
+        'zulu_time': zulu_time,
+        'areas_data': areas_data
+    }
 
 # Route to display data for a specific area
 @app.route('/area/<area_name>')

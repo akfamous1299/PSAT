@@ -7,6 +7,9 @@ body, html {
 }
 
 header {
+    position: sticky;
+    top: 0;
+    height: auto;
     background: #007bff;
     color: #fff;
     padding: 1em;
@@ -95,7 +98,3 @@ th {
     }
 }
 
-/* Add data-label attribute to each TD for responsive tables */
-<!-- Example:
-<td data-label="NAS ID">{{ airport['NAS ID'] }}</td>
--->
