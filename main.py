@@ -4,7 +4,6 @@ from metar_fetcher import fetch_metar_data
 from pirep_fetcher import fetch_pirep_data
 from datetime import datetime
 import pytz
-import jsonify
 
 app = Flask(__name__)
 
