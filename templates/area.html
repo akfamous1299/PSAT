@@ -4,46 +4,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ area_name }} Area Data</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/area_styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <header>
-        <h3>PSAT</h3>
-        <div class="zulu-time" id="time">Current Zulu Time: {{ zulu_time }}</div>
+        <h3 class="logo">PSAT</h3>
+        <div class="zulu-time" id="time"></div>
         <nav class="nav">
             <ul>
                 <li><a href="/">OMIC</a></li>
                 <li><a href="/area/NORTH">North</a></li>
                 <li><a href="/area/SOUTH">South</a></li>
                 <li><a href="/area/HIGH">High</a></li>
-                <li><a href="/area/ATOP">Atop</a></li>
+                <li><a href="/area/ATOP">ATOP</a></li>
             </ul>
         </nav> 
     </header>
     <main class="container">
-        <section class="data-section">
-            <h2>METAR Stations</h2>
-            <table class="metar-table">
-                <thead>
-                    <tr>
-                        <th>NAS ID</th>
-                        <th>Visibility (mi)</th>
-                        <th>Ceiling (ft AGL)</th>
-                        <th>Weather String</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for airport, station in stations %}
-                    <tr>
-                        <td>{{ airport['NAS ID'] }}</td>
-                        <td>{{ station['visibility'] }}</td>
-                        <td>{{ station['ceiling_altitude'] }}</td>
-                        <td>{{ station['wx_string'] }}</td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </section>
+        {% if area_name!= "HIGH" %}  <!-- Conditional statement to check if not "HIGH" area -->
+            <section class="data-section">
+                <h2>METAR Stations</h2>
+                <table class="metar-table">
+                    <thead>
+                        <tr>
+                            <th>NAS ID</th>
+                            <th>Visibility (mi)</th>
+                            <th>Ceiling (ft AGL)</th>
+                            <th>Weather String</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for airport, station in stations %}
+                        <tr>
+                            <td>{{ airport['NAS ID'] }}</td>
+                            <td>{{ station['visibility'] }}</td>
+                            <td>{{ station['ceiling_altitude'] }}</td>
+                            <td>{{ station['wx_string'] }}</td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </section>
+        {% endif %}  <!-- Closing the if statement -->
 
         <section class="data-section">
             <h2>PIREP Data</h2>

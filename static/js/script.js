@@ -1,18 +1,21 @@
 function updateZuluTime() {
     // Get the current time in UTC
     const now = new Date();
+    const month = String(now.getUTCMonth()+1).padStart(2, '0');
+    const day = String(now.getUTCDate()).padStart(2, '0');
+    const year = String(now.getUTCFullYear()).padStart(2, '0');
     const hours = String(now.getUTCHours()).padStart(2, '0');
     const minutes = String(now.getUTCMinutes()).padStart(2, '0');
 
     // Format the Zulu time as "HH:MM Z"
-    const formattedTime = `Current Zulu Time: ${hours}:${minutes} Z`;
+    const formattedTime = `Zulu Time: ${month}/${day}/${year} ${hours}:${minutes} Z`;
 
     // Update the HTML content
     document.getElementById('time').innerHTML = formattedTime;
 }
 
 // Initial call to display the time immediately
-updateZuluTime();
+setTimeout(updateZuluTime, 300);
 
 // Update every minute (60,000 milliseconds)
 setInterval(updateZuluTime, 30000);

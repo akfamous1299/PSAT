@@ -1,0 +1,12 @@
+@import 'globals/reset.css';
+@import 'globals/variables.css';
+@import 'globals/typography.css';
+
+@import 'components/header.css';
+@import 'components/nav.css';
+@import 'components/container.css';
+@import 'components/tables.css';
+
+@import 'pages/areas.css';
+@import 'pages/home.css';
+/* @import 'pages/other-page.css'; */

@@ -81,7 +81,7 @@ def index():
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the index.html template with all the data
-    return render_template('index.html', zulu_time=zulu_time, areas_data=areas_data)
+    return render_template('index.html', areas_data=areas_data)
 
 @app.route('/fetch-updated-data')
 def fetch_updated_data():
@@ -98,7 +98,6 @@ def fetch_updated_data():
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     return {
-        'zulu_time': zulu_time,
         'areas_data': areas_data
     }
 
@@ -133,7 +132,8 @@ def area(area_name):
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the area.html template with METAR and PIREP data
-    return render_template('area.html', zulu_time=zulu_time, area_name=area_name, stations=area_stations, pireps=area_pireps)
+    return render_template('area.html', area_name=area_name, stations=area_stations, pireps=area_pireps)
+
 
 if __name__ == "__main__":
     app.run(debug=True, port=5678)

@@ -4,51 +4,53 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSAT</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/styles.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
 <body>
     <header>
-        <h3>PSAT</h3>
-        <div class="zulu-time" id="time">Current Zulu Time: {{ zulu_time }}</div>
+        <h3 class="logo">PSAT</h3>
+        <div class="zulu-time" id="time"></div>
         <nav class="nav">
             <ul>
                 <li><a href="/">OMIC</a></li>
                 <li><a href="/area/NORTH">North</a></li>
                 <li><a href="/area/SOUTH">South</a></li>
                 <li><a href="/area/HIGH">High</a></li>
-                <li><a href="/area/ATOP">Atop</a></li>
+                <li><a href="/area/ATOP">ATOP</a></li>
             </ul>
         </nav> 
     </header>
     <main class="container">
         <!-- Loop through each area and display the PIREP requirement status for each station -->
         {% for area, data in areas_data.items() %}
-            <h2>{{ area }} Area</h2>
-            <table>
-                <thead>
+    {% if area!= "HIGH" %}  <!-- Add this conditional statement to skip "HIGH" -->
+        <h2>{{ area }} Area</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>NAS ID</th>
+                    <th>Latest PIREP</th>
+                    <th>Requirement</th>
+                </tr>
+            </thead>
+            <tbody id="stations-{{ area }}">
+                {% for station, status in data['pirep_status'].items() %}
                     <tr>
-                        <th>NAS ID</th>
-                        <th>Latest PIREP Time</th>
-                        <th>Requirement</th>
+                        <td>{{ station }}</td>
+                        <td>
+                            {% if status['Latest PIREP'] %}
+                                {{ status['Latest PIREP']['Time'] }}
+                            {% else %}
+                                None
+                            {% endif %}
+                        </td>
+                        <td>{{ status['Requirement'] }}</td>
                     </tr>
-                </thead>
-                <tbody id="stations-{{ area }}">
-                    {% for station, status in data['pirep_status'].items() %}
-                        <tr>
-                            <td>{{ station }}</td>
-                            <td>
-                                {% if status['Latest PIREP'] %}
-                                    {{ status['Latest PIREP']['Time'] }}
-                                {% else %}
-                                    None
-                                {% endif %}
-                            </td>
-                            <td>{{ status['Requirement'] }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        {% endfor %}
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endif %}  <!-- Closing the if statement -->
+{% endfor %}
     </main>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
