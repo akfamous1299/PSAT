@@ -17,6 +17,10 @@ def point_in_polygon(lat, lon, polygon):
 def find_polygons(lat, lon, alt):
     found_poly = []
 
+    if lon >= 0:
+        lon = -180-(180-lon)
+        #print(lon)
+
     point = Point(lat, lon)
 
     area = None
@@ -95,11 +99,14 @@ def fetch_pirep_data():
     try:
         df = pd.read_csv(StringIO(response.text), skiprows=5)
         df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5)
+        #print(df_pasy)
 
-        if not df.isnull or not df_pasy.isnull:
+        if not df.empty or not df_pasy.empty:
             df = pd.concat([df, df_pasy], ignore_index=True)
+            #print(df)
         else:
             df = df
+        #print(df)
 
     except ValueError as e:
         print(f"Failed to parse CSV: {e}")
