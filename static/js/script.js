@@ -14,11 +14,8 @@ function updateZuluTime() {
     document.getElementById('time').innerHTML = formattedTime;
 }
 
-// Initial call to display the time immediately
-setTimeout(updateZuluTime, 300);
-
 // Update every minute (60,000 milliseconds)
-setInterval(updateZuluTime, 30000);
+setInterval(updateZuluTime, 75);
 
 function fetchUpdatedData(page) {
     fetch(`/fetch-updated-data?page=${page}`)
@@ -54,7 +51,7 @@ function getCurrentPage() {
 // Initial data fetch
 const currentPage = getCurrentPage();
 fetchUpdatedData(currentPage);  // Call with the current page name
-setInterval(() => fetchUpdatedData(currentPage), 60000); // Refresh every minute
+setInterval(() => fetchUpdatedData(currentPage), 30000); // Refresh every minute
 
 
 
