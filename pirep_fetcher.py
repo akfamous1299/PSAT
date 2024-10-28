@@ -149,7 +149,7 @@ def fetch_pirep_data():
                             "APT": apt, 
                             "Sector": sector_number
                         })
-                    print(f"PIREP found in:{area_name}")
+                    #print(f"PIREP found in:{area_name}")
                     break
 
             #print(pireps)
