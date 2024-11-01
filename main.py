@@ -7,7 +7,7 @@ import pytz
 
 app = Flask(__name__)
 
-breakpoint()
+
 # Route to display METAR and PIREP data for each area
 @app.route('/')
 def index():
@@ -137,4 +137,4 @@ def area(area_name):
 
 
 if __name__ == "__main__":
-    app.run(debug=False, port=5000)
+    app.run(debug=True, port=5000)

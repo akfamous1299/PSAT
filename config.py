@@ -787,7 +787,7 @@ pirep_config = {
     "MaxLat": 72,
     "MinLon": -179,
     "MaxLon": -130,
-    "hoursBeforeNow": 1,
+    "hoursBeforeNow": 1.5,
     "url_template": "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow={hours}&format=csv&boundingBox={minlat},{minlon},{maxlat},{maxlon}"
 }
 def get_pirep_url():
@@ -856,6 +856,21 @@ areas = {
                 (56.762, -151.750),
                 (57.464, -150.531),
                 (59.183, -150.000)
+            ],
+            13:[
+                (61.621, -158.233),
+                (62.450, -163.250),
+                (61.870, -166.440),
+                (60.588, -168.364),
+                (59.331, -167.914),
+                (58.740, -167.713),
+                (56.967, -165.000),
+                (56.967, -162.500),
+                (59.133, -159.500),
+                (59.500, -158.000),
+                (59.900, -156.417),
+                (61.390, -156.462)
+                
             ],
             15:[
                 (62.96,	-148.57),

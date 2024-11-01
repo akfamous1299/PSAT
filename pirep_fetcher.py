@@ -1,9 +1,9 @@
-import re
 from datetime import datetime
 from io import StringIO
 
 import pandas as pd
 import requests
+from shapely import is_valid
 from shapely.geometry import Point, Polygon
 
 import config
@@ -22,16 +22,17 @@ def find_polygons(lat, lon, alt):
         #print(lon)
 
     point = Point(lat, lon)
+    
 
     area = None
-
     for area_name, area_data in config.areas.items():
         for sector_number, sector_polygon in area_data["sectors"].items():
-            #print(f"Testing {area_name},{sector_number}")
+            #print(f"Testing {point} in {area_name},{sector_number}")
             poly = Polygon(sector_polygon)
+            #print(sector_number, is_valid(poly))
             if poly.contains(point):
                 found_poly.append(sector_number)
-                #print(found_poly)
+    #print(found_poly, point, alt)
         
 
     if len(found_poly) > 1:
@@ -39,8 +40,10 @@ def find_polygons(lat, lon, alt):
             found_poly = max(found_poly)
         else:
             found_poly = min(found_poly)
-    else:
+    elif len(found_poly) == 1:
         found_poly = found_poly[0]
+    else:
+        return None
 
     for area_name, area_data in config.areas.items():
         for sector_number, sector_polygon in area_data["sectors"].items():
@@ -97,8 +100,8 @@ def fetch_pirep_data():
 
     # Read the CSV into a DataFrame, skip rows and handle headers appropriately
     try:
-        df = pd.read_csv(StringIO(response.text), skiprows=5)
-        df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5)
+        df = pd.read_csv(StringIO(response.text), skiprows=5, on_bad_lines='warn')
+        df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5, on_bad_lines='warn')
         #print(df_pasy)
 
         if not df.empty or not df_pasy.empty:
@@ -126,7 +129,7 @@ def fetch_pirep_data():
             apt = extract_apt(raw_text)  # Extract the APT
             rmk = extract_rmk(raw_text)# Extract the RMK
             loc = extract_loc(raw_text)  # Extract the LOC
-            #print(f"Extracted (lat: {lat}, lon: {lon})")  # Debugging
+            #print(f"Extracted (apt: {apt}, alt: {alt})")  # Debugging
 
             sector_number = find_polygons(lat, lon, alt)
 
