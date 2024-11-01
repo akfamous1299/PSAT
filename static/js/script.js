@@ -1,4 +1,5 @@
-function updateZuluTime() {
+//script.js
+/*function updateZuluTime() {
     // Get the current time in UTC
     const now = new Date();
     const month = String(now.getUTCMonth()+1).padStart(2, '0');
@@ -12,16 +13,20 @@ function updateZuluTime() {
 
     // Update the HTML content
     document.getElementById('time').innerHTML = formattedTime;
-}
+}*/
 
 // Update every minute (60,000 milliseconds)
-setInterval(updateZuluTime, 75);
+function getCurrentPage() {
+    return window.location.pathname.split("/").pop() || "index"; // Defaults to "index" if the last segment is empty
+}
 
+// Function to fetch updated data
 function fetchUpdatedData(page) {
     fetch(`/fetch-updated-data?page=${page}`)
-        .then(response => response.json())
-        .then(data => {
-            document.getElementById('time').innerHTML = 'Current Zulu Time: ' + data.zulu_time;
+     .then(response => response.json())
+     .then(data => {
+            // Update Zulu Time with server-provided data
+            document.getElementById('time').innerHTML = data.zulu_time;
 
             // Update station data for each area
             for (let area in data.areas_data) {
@@ -33,25 +38,17 @@ function fetchUpdatedData(page) {
                     let station = data.areas_data[area].pirep_status[stationID];
                     let row = `<tr>
                         <td>${stationID}</td>
-                        <td>${station.Latest_PIREP ? station.Latest_PIREP.Time : 'No PIREP Found'}</td>
+                        <td>${station.Latest_PIREP? station.Latest_PIREP.Time : 'No PIREP Found'}</td>
                         <td>${station.Requirement}</td>
                     </tr>`;
                     tbody.innerHTML += row;
                 }
             }
         })
-        .catch(error => console.error('Error fetching updated data:', error));
-}
-
-// Function to determine the current page from the URL
-function getCurrentPage() {
-    return window.location.pathname.split("/").pop() || "index"; // Defaults to "index" if the last segment is empty
+     .catch(error => console.error('Error fetching updated data:', error));
 }
 
 // Initial data fetch
 const currentPage = getCurrentPage();
 fetchUpdatedData(currentPage);  // Call with the current page name
-setInterval(() => fetchUpdatedData(currentPage), 30000); // Refresh every minute
-
-
-
+setInterval(() => fetchUpdatedData(currentPage), 30000);

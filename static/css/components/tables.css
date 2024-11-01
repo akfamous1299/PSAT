@@ -1,7 +1,10 @@
+/* Existing table styles */
 .metar-table,.pirep-table {
     width: 100%;
     border-collapse: collapse;
 }
+
+
 
 th, td {
     border: 1px solid #ddd;
@@ -13,26 +16,53 @@ th {
     background-color: #f2f2f2;
 }
 
-/* Responsive tables */
-@media only screen and (max-width: 760px),
-(min-device-width: 768px) and (max-device-width: 1024px) {
-    table {
-        width: 100%;
+/* Updated Media Query to keep tables on one line on smaller screens */
+@media (max-width: 767px) { /* Adjust breakpoint as needed */
+    .table-grid {
+           grid-template-columns: 1fr; /* Single column on smaller screens */
+       }
+    .table-wrapper {
+           display: inline-block; /* Display table wrapper as inline-block */
+           vertical-align: top; /* Align table wrapper to the top */
+           margin-right: 10px; /* Optional: add some margin between tables */
+       }
+    .table-wrapper table {
+           display: inline-table; /* Display table as inline-table */
+           border-collapse: collapse; /* Maintain border collapse */
+           width: auto; /* Set table width to auto */
+       }
+    .table-wrapper table tr {
+           display: inline-table; /* Display table row as inline-table */
+       }
+    .table-wrapper table td {
+           display: inline-block; /* Display table cell as inline-block */
+           vertical-align: top; /* Align cell content to the top */
+           border: 1px solid #ddd; /* Maintain cell border */
+           padding: 0.5em; /* Maintain cell padding */
+           margin-right: 10px; /* Optional: add some margin between cells */
+       }
+    .table-wrapper table th {
+           display: inline-block; /* Display table header cell as inline-block */
+           vertical-align: top; /* Align header cell content to the top */
+           background-color: #f2f2f2; /* Maintain header cell background color */
+           border: 1px solid #ddd; /* Maintain header cell border */
+           padding: 0.5em; /* Maintain header cell padding */
+           margin-right: 10px; /* Optional: add some margin between cells */
+       }
+   }
+
+/* Optional: If you want to retain some responsiveness for larger screens but keep the one-line behavior on smaller screens */
+@media (min-width: 768px) { /* Adjust breakpoint as needed */
+  .table-grid {
+        grid-template-columns: 1fr 1fr; /* Two columns of equal width for larger screens */
     }
-    table thead {
-        display: none;
+  .north { 
+        grid-column: 1; 
     }
-    table td {
-        display: block;
-        text-align: right;
-        padding-left: 50%;
+  .south,.atop {
+        grid-column: 2; 
     }
-    table td:before {
-        content: attr(data-label);
-        float: left;
-        width: 50%;
-        padding-right: 10px;
-        font-weight: bold;
-        text-align: left;
+  .south { 
+        grid-row: 1;
     }
 }

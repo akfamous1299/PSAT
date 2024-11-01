@@ -1,3 +1,4 @@
+<!--index.html-->
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,11 +6,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PSAT</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <!-- Other CSS files are imported within main.css, so no need to link them separately here -->
 </head>
 <body>
     <header>
         <h3 class="logo">PSAT</h3>
-        <div class="zulu-time" id="time"></div>
+        <div class="zulu-time" id="time">{{ zulu_time }}</div>
         <nav class="nav">
             <ul>
                 <li><a href="/">OMIC</a></li>
@@ -22,35 +24,39 @@
     </header>
     <main class="container">
         <!-- Loop through each area and display the PIREP requirement status for each station -->
-        {% for area, data in areas_data.items() %}
-    {% if area!= "HIGH" %}  <!-- Add this conditional statement to skip "HIGH" -->
-        <h2>{{ area }} Area</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>NAS ID</th>
-                    <th>Latest PIREP</th>
-                    <th>Requirement</th>
-                </tr>
-            </thead>
-            <tbody id="stations-{{ area }}">
-                {% for station, status in data['pirep_status'].items() %}
-                    <tr>
-                        <td>{{ station }}</td>
-                        <td>
-                            {% if status['Latest PIREP'] %}
-                                {{ status['Latest PIREP']['Time'] }}
-                            {% else %}
-                                None
-                            {% endif %}
-                        </td>
-                        <td>{{ status['Requirement'] }}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% endif %}  <!-- Closing the if statement -->
-{% endfor %}
+        <div class="table-grid"> <!-- Added container for grid layout -->
+            {% for area, data in areas_data.items() %}
+                {% if area!= "HIGH" %}  
+                    <div class="table-wrapper {{ area | lower }}"> <!-- Added wrapper with dynamic class -->
+                        <h2>{{ area }} Area</h2>
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>NAS ID</th>
+                                    <th>Latest PIREP</th>
+                                    <th>Requirement</th>
+                                </tr>
+                            </thead>
+                            <tbody id="stations-{{ area }}">
+                                {% for station, status in data['pirep_status'].items() %}
+                                    <tr>
+                                        <td>{{ station }}</td>
+                                        <td>
+                                            {% if status['Latest PIREP'] %}
+                                                {{ status['Latest PIREP']['Time'] }}
+                                            {% else %}
+                                                None
+                                            {% endif %}
+                                        </td>
+                                        <td>{{ status['Requirement'] }}</td>
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                {% endif %}  
+            {% endfor %}
+        </div>
     </main>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>

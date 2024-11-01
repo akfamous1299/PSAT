@@ -1,3 +1,4 @@
+#main.py
 from flask import Flask, render_template
 import config  # Import the config file
 from metar_fetcher import fetch_metar_data
@@ -82,7 +83,7 @@ def index():
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the index.html template with all the data
-    return render_template('index.html', areas_data=areas_data)
+    return render_template('index.html', areas_data=areas_data, zulu_time=zulu_time)
 
 @app.route('/fetch-updated-data')
 def fetch_updated_data():
@@ -99,7 +100,8 @@ def fetch_updated_data():
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     return {
-        'areas_data': areas_data
+        'areas_data': areas_data,
+        'zulu_time' : zulu_time
     }
 
 # Route to display data for a specific area
@@ -133,7 +135,7 @@ def area(area_name):
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the area.html template with METAR and PIREP data
-    return render_template('area.html', area_name=area_name, stations=area_stations, pireps=area_pireps)
+    return render_template('area.html', area_name=area_name, stations=area_stations, pireps=area_pireps, zulu_time=zulu_time)
 
 
 if __name__ == "__main__":
