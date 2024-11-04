@@ -16,39 +16,68 @@
 }*/
 
 // Update every minute (60,000 milliseconds)
-function getCurrentPage() {
-    return window.location.pathname.split("/").pop() || "index"; // Defaults to "index" if the last segment is empty
-}
-
-// Function to fetch updated data
 function fetchUpdatedData(page) {
-    fetch(`/fetch-updated-data?page=${page}`)
-     .then(response => response.json())
-     .then(data => {
-            // Update Zulu Time with server-provided data
-            document.getElementById('time').innerHTML = data.zulu_time;
-
-            // Update station data for each area
-            for (let area in data.areas_data) {
-                let tbody = document.getElementById(`stations-${area}`);
-                tbody.innerHTML = '';  // Clear existing data
-
-                // Populate the table with updated data
-                for (let stationID in data.areas_data[area].pirep_status) {
-                    let station = data.areas_data[area].pirep_status[stationID];
-                    let row = `<tr>
-                        <td>${stationID}</td>
-                        <td>${station.Latest_PIREP? station.Latest_PIREP.Time : 'No PIREP Found'}</td>
-                        <td>${station.Requirement}</td>
-                    </tr>`;
-                    tbody.innerHTML += row;
-                }
-            }
-        })
-     .catch(error => console.error('Error fetching updated data:', error));
-}
-
-// Initial data fetch
-const currentPage = getCurrentPage();
-fetchUpdatedData(currentPage);  // Call with the current page name
-setInterval(() => fetchUpdatedData(currentPage), 30000);
+    fetch(`/fetch-updated-data/${page}`)
+   .then(response => response.json())
+   .then(data => {
+      if (page === "index") {
+        document.getElementById('time').innerHTML = data.zulu_time;
+        for (let area in data.areas_data) {
+          let tbody = document.getElementById(`stations-${area}`);
+          tbody.innerHTML = '';  
+          for (let stationID in data.areas_data[area].pirep_status) {
+            let station = data.areas_data[area].pirep_status[stationID];
+            let latestPirepTime =  ['Latest PIREP']['Time']? ['Latest PIREP']['Time'] : 'No PIREP Found';
+            let row = `<tr>
+                <td>${stationID}</td>
+                <td>${latestPirepTime}</td>
+                <td>${station.Requirement}</td>
+              </tr>`;
+            tbody.innerHTML += row;
+          }
+        }
+      } else {
+        document.getElementById('time').innerHTML = data.zulu_time;
+        let metarTableBody = document.querySelector('.metar-table tbody');
+        metarTableBody.innerHTML = '';  
+        if (data.area_data && data.area_data.stations && Array.isArray(data.area_data.stations)) {
+          for (let station of data.area_data.stations) {
+            let row = `<tr>
+                <td>${station[0]['NAS ID']}</td>
+                <td>${station[1]['visibility']}</td>
+                <td>${station[1]['ceiling_altitude']}</td>
+                <td>${station[1]['wx_string']}</td>
+              </tr>`;
+            metarTableBody.innerHTML += row;
+          }
+        }
+        let pirepTableBody = document.querySelector('.pirep-table tbody');
+        pirepTableBody.innerHTML = '';  
+        for (let pirep of data.area_data.pireps) {
+          let row = `<tr>
+              <td>${pirep['Location']}</td>
+              <td>${pirep['Time']}</td>
+              <td>${pirep['Type']}</td>
+              <td>${pirep['ALT']}</td>
+              <td>${pirep['ACFT']}</td>
+              <td>${pirep['PIREP Remarks']}</td>
+            </tr>`;
+          pirepTableBody.innerHTML += row;
+        }
+      }
+    })
+   .catch(error => console.error('Error fetching updated data:', error));
+  }
+  
+  function getCurrentPage() {
+    const currentUrl = window.location.pathname;
+    if (currentUrl.startsWith('/area/')) {
+      return currentUrl.split('/').pop();
+    }
+    return currentUrl === '/'? 'index' : currentUrl.slice(1);
+  }
+  
+  // Initial data fetch
+  const currentPage = getCurrentPage();
+  fetchUpdatedData(currentPage);  
+  setInterval(() => fetchUpdatedData(currentPage), 30000);
