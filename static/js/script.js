@@ -27,7 +27,7 @@ function fetchUpdatedData(page) {
           tbody.innerHTML = '';  
           for (let stationID in data.areas_data[area].pirep_status) {
             let station = data.areas_data[area].pirep_status[stationID];
-            let latestPirepTime =  ['Latest PIREP']['Time']? ['Latest PIREP']['Time'] : 'No PIREP Found';
+            let latestPirepTime = station?.['Latest PIREP']?.['Time']?? 'None';
             let row = `<tr>
                 <td>${stationID}</td>
                 <td>${latestPirepTime}</td>
