@@ -1,15 +1,242 @@
-/*main.css*/
-@import 'globals/reset.css';
-@import 'globals/variables.css';
-@import 'globals/typography.css';
-
-@import 'components/header.css';
-@import 'components/nav.css';
-@import 'components/container.css';
-@import 'components/tables.css';
-
-@import 'pages/areas.css';
-@import 'pages/home.css';
-
-@import 'styles.css'
-/* @import 'pages/other-page.css'; */
+/* Variables */
+:root {
+    --font-family: 'Open Sans', sans-serif;
+    --background-color: #000000;
+    --line-height: 1.6;
+    --header-background: #007bff;
+    --header-color: #fff;
+    --text-color: ; /* <--- this variable is currently empty */
+  }
+  
+  /* Global Styles */
+  body, html {
+    font-family: var(--font-family);
+    line-height: var(--line-height);
+    height: 100%;
+    margin: 0;
+    background-color: var(--background-color);
+  }
+  
+  /* Header Styles */
+  header {
+    position: sticky;
+    top: 0;
+    height: auto;
+    background: var(--header-background);
+    color: var(--header-color);
+    padding: 0.25em;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+  }
+  
+  header.logo {
+    font-size: 1.2em;
+    font-weight: bold;
+    margin: 0;
+  }
+  
+  header.zulu-time {
+    font-size: 1.2em;
+    margin: 0;
+    text-align: center;
+    flex: 1;
+  }
+  
+  /* Navigation Styles */
+  .nav ul {
+    list-style: none;
+    margin: 0;
+    padding: 1em;
+    display: flex;
+    justify-content: space-evenly;
+    width: 100%;
+    position: relative;
+  }
+  
+  .nav ul li {
+    flex: 1;
+    text-align: center;
+    position: relative;
+  }
+  
+  .nav ul li ul.subnav {
+    display: none;
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background-color: #333;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    z-index: 1;
+  }
+  
+  .nav ul li:hover ul.subnav {
+    display: block;
+  }
+  
+  .nav ul li ul.subnav li {
+    padding: 0.5em;
+    border-bottom: 1px solid #ccc;
+  }
+  
+  .nav ul li ul.subnav li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .nav ul li ul.subnav li a:hover {
+    color: #ccc;
+  }
+  
+  /* Container Styles */
+  .container {
+    max-width: 1200px;
+    margin: auto;
+    padding: 2em;
+  }
+  
+  main.container {
+    /* No unique styles, using global.container styles */
+  }
+  
+  main.container h2 {
+    color: #333;
+    margin-top: 0;
+  }
+  
+  main.container p {
+    font-size: 1.1em;
+    color: #666;
+  }
+  
+  /* Data Section Styles */
+  .data-section {
+    background: #fff;
+    padding: 1em;
+    margin: 1em 0;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    width: 100%;
+  }
+  
+  .data-section h2 {
+    margin-top: 0;
+  }
+  
+  /* Table Styles */
+  .metar-table,.pirep-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+  
+  th, td {
+    border: 1px solid #ddd;
+    padding: 0.5em;
+    text-align: left;
+  }
+  
+  th {
+    background-color: #f2f2f2;
+  }
+  
+  /* Responsive Table Styles */
+  @media only screen and (max-width: 760px), (min-device-width: 768px) and (max-device-width: 1024px) {
+    table {
+      width: 100%;
+    }
+    table thead {
+      display: none;
+    }
+    table td {
+      display: block;
+      text-align: right;
+      padding-left: 50%;
+    }
+    table td:before {
+      content: attr(data-label);
+      float: left;
+      width: 50%;
+      padding-right: 10px;
+      font-weight: bold;
+      text-align: left;
+    }
+  }
+  
+  /* Block Container Styles */
+  .block-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  
+  .block {
+    width: 150px;
+    height: 100px;
+    margin: 10px;
+    display: inline-block;
+    vertical-align: top;
+    text-align: center;
+    padding: 20px;
+    box-sizing: border-box;
+    color: white;
+    font-weight: bold;
+    font-size: 16px;
+    border-radius: 5px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+  }
+  
+  .block.green {
+    background-color: #2ecc71;
+  }
+  
+  .block.yellow {
+    background-color: #f1c40f;
+  }
+  
+  .block.red {
+    background-color: #e74c3c;
+  }
+  
+  .block:hover::after {
+    content: attr(title);
+    position: absolute;
+    bottom: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    background-color: #333;
+    color: #fff;
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 14px;
+  }
+  
+  /* Grid Styles */
+  .table-grid {
+    display: grid;
+    gap: 20px;
+  }
+  
+  @media (min-width: 768px) {
+   .table-grid {
+      grid-template-columns: 1fr 1fr;
+    }
+   .north {
+      grid-column: 1;
+    }
+   .south,.atop {
+      grid-column: 2;
+    }
+   .south {
+      grid-row: 1;
+    }
+  }
+  
+  /* Table Wrapper Styles */
+  .table-wrapper {
+    background: #fff;
+    padding: 1em;
+    border-radius: 5px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }

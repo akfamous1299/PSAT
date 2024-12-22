@@ -1,0 +1,58 @@
+<!-- area_block.html -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{{ area_name }} Area Blocks</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
+<body>
+    <header>
+      <h3 class="logo">PSAT</h3>
+      <div class="zulu-time" id="time">{{ zulu_time }}</div>
+      <nav class="nav">
+        <ul>
+          <li><a href="/">OMIC</a></li>
+          <li>
+            <a href="/area/NORTH">North</a>
+            <ul class="subnav">
+              <li><a href="/area/NORTH">North Area</a></li>
+              <li><a href="/area-block/NORTH">North Blocks</a></li>
+            </ul>
+          </li>
+          <li>
+            <a href="/area/SOUTH">South</a>
+            <ul class="subnav">
+              <li><a href="/area/SOUTH">South Area</a></li>
+              <li><a href="/area-block/SOUTH">South Blocks</a></li>
+            </ul>
+          </li>
+          <li><a href="/area/HIGH">High</a></li>
+          <li><a href="/area/ATOP">ATOP</a></li>
+        </ul>
+      </nav>
+    </header>
+    <main class="container">
+      <h2>{{ area_name }} Area Blocks (PIREP Status)</h2>
+      <div class="block-container">
+        {% for nas_id, pirep_status in area_data.pirep_status.items() %}
+            {% if pirep_status['Status'] == 'Within 45 mins' %}
+                <div class="block green" title="{{ pirep_status['Status'] }}">
+                    <b>{{ nas_id }}</b>
+                {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                    <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                        <b>{{ nas_id }}</b>
+                    {% else %}
+                        <div class="block red" title="{{ pirep_status['Status'] }}">
+                            <b>{{ nas_id }}</b>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

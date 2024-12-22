@@ -28,3 +28,31 @@
     font-size: 1.2em;
     margin-bottom: 0.5em;
 }
+.subnav {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 150px;
+    box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+    z-index: 1;
+  }
+  
+  .subnav li {
+    float: none;
+  }
+  
+  .subnav li a {
+    padding: 10px;
+    text-decoration: none;
+    display: block;
+    text-align: left;
+    transition: background-color 0.3s;
+  }
+  
+  .subnav li a:hover {
+    background-color: #ddd;
+  }
+  
+  .nav li:hover.subnav {
+    display: block;
+  }
