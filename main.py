@@ -134,51 +134,34 @@ def fetch_updated_data(page):
                 # Calculate the time difference between now and the latest PIREP
                 now = datetime.now(pytz.utc)
                 pirep_time = datetime.strptime(latest_pirep['RPT_TIME'], "%Y-%m-%dT%H:%M:%SZ").replace(tzinfo=pytz.utc)
-
-                time_diff = (now - pirep_time).total_seconds() / 3600  # Convert to hours
-
-                # Determine if a new PIREP is required (every hour)
-                if time_diff >= 1:
-                    station_pirep_status[station[0]['NAS ID']] = {'Latest PIREP': latest_pirep, 'Requirement': 'NEW PIREP REQUIRED'}
-                else:
-                    station_pirep_status[station[0]['NAS ID']] = {'Latest PIREP': latest_pirep, 'Requirement': 'Up to Date'}
+                time_diff = (now - pirep_time).total_seconds() / 60  # Convert to minutes
             else:
-                # If no PIREPs are found for the station, mark as 'NEW PIREP REQUIRED'
-                station_pirep_status[station[0]['NAS ID']] = {'Latest PIREP': None, 'Requirement': 'NEW PIREP REQUIRED'}
+                latest_pirep = None
+                time_diff = None
+
+            station_pirep_status[station[0]['NAS ID']] = {
+                'Latest PIREP': latest_pirep,
+                'Time Diff': time_diff,
+                'Status': 'Within 45 mins' if time_diff is not None and time_diff <= 45 else
+                          'Within 60 mins' if time_diff is not None and time_diff <= 60 else
+                          'Over 60 mins' if time_diff is not None else 'No PIREP Found'
+            }
 
         # Store both METAR and PIREP data in the dictionary
-        if page == "index":
-            # For index.html, store only PIREP requirement status
-            areas_data[area] = {
-                'pirep_status': station_pirep_status
-            }
-        elif page in areas:
-            # For area.html, store both METAR stations and PIREP requirement status
-            areas_data[area] = {
-                'stations': area_stations,
-                'pirep_status': station_pirep_status,
-                'pireps': area_pireps  # Added PIREPs for area.html
-            }
+        areas_data[area] = {
+           'stations': area_stations,
+            'pirep_status': station_pirep_status,
+            'pireps': area_pireps
+        }
 
     # Get Zulu time for the response
     now = datetime.now(pytz.utc)
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
-    if page == "index":
-        # For index.html, return data for all areas except HIGH
-        return {
-            'areas_data': {area: data for area, data in areas_data.items() if area!= "HIGH"},
-            'zulu_time': zulu_time
-        }
-    elif page in areas:
-        # For area.html, return data for the specific area
-        return {
-            'area_name': page,
-            'area_data': areas_data.get(page),
-            'zulu_time': zulu_time
-        }
-    else:
-        return "Page not found", 404
+    return {
+        'zulu_time': zulu_time,
+        'areas_data': areas_data
+    }
 
 # Route to display data for a specific area
 @app.route('/area/<area_name>')

@@ -60,7 +60,7 @@
               <tr>
                 <th>NAS ID</th>
                 <th>Latest PIREP</th>
-                <th>Requirement</th>
+                <th>Status</th>
               </tr>
             </thead>
             <tbody id="stations-{{ area }}">
@@ -74,7 +74,7 @@
                   None
                   {% endif %}
                 </td>
-                <td>{{ status['Requirement'] }}</td>
+                <td>{{ status['Status'] }}</td>
               </tr>
               {% endfor %}
             </tbody>
