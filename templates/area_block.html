@@ -1,5 +1,4 @@
 <!-- area_block.html -->
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -48,23 +47,85 @@
     </header>
     <main class="container">
       <h2>{{ area_name }} Area Blocks (PIREP Status)</h2>
-      <div class="block-container">
-        {% for nas_id, pirep_status in area_data.pirep_status.items() %}
-            {% if pirep_status['Status'] == 'Within 45 mins' %}
-                <div class="block green" title="{{ pirep_status['Status'] }}">
+      <div class="area-blocks-container">
+        {% if area_name == 'NORTH' %}
+          <div class="split left">
+            <h3>North Area (Left)</h3>
+            {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+              {% if pirep_status['Sector'] in [4, 15, 16] %}
+                {% if pirep_status['Status'] == 'Within 45 mins' %}
+                  <div class="block green" title="{{ pirep_status['Status'] }}">
                     <b>{{ nas_id }}</b>
                 {% elif pirep_status['Status'] == 'Within 60 mins' %}
-                    <div class="block yellow" title="{{ pirep_status['Status'] }}">
-                        <b>{{ nas_id }}</b>
-                    {% else %}
-                        <div class="block red" title="{{ pirep_status['Status'] }}">
-                            <b>{{ nas_id }}</b>
-                        {% endif %}
-                    </div>
-                {% endfor %}
+                  <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                    <b>{{ nas_id }}</b>
+                {% else %}
+                  <div class="block red" title="{{ pirep_status['Status'] }}">
+                    <b>{{ nas_id }}</b>
+                {% endif %}
+              </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="split right">
+          <h3>North Area (Right)</h3>
+          {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+            {% if pirep_status['Sector'] in [3, 9, 13] %}
+              {% if pirep_status['Status'] == 'Within 45 mins' %}
+                <div class="block green" title="{{ pirep_status['Status'] }}">
+                  <b>{{ nas_id }}</b>
+              {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                  <b>{{ nas_id }}</b>
+              {% else %}
+                <div class="block red" title="{{ pirep_status['Status'] }}">
+                  <b>{{ nas_id }}</b>
+              {% endif %}
             </div>
-    </main>
+          {% endif %}
+        {% endfor %}
+      </div>
+    {% elif area_name == 'SOUTH' %}
+      <div class="split left">
+        <h3>South Area (Left)</h3>
+        {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+          {% if pirep_status['Sector'] in [5, 6] %}
+            {% if pirep_status['Status'] == 'Within 45 mins' %}
+              <div class="block green" title="{{ pirep_status['Status'] }}">
+                <b>{{ nas_id }}</b>
+            {% elif pirep_status['Status'] == 'Within 60 mins' %}
+              <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                <b>{{ nas_id }}</b>
+            {% else %}
+              <div class="block red" title="{{ pirep_status['Status'] }}">
+                <b>{{ nas_id }}</b>
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+    </div>
+    <div class="split right">
+      <h3>South Area (Right)</h3>
+      {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+        {% if pirep_status['Sector'] in [7, 8] %}
+          {% if pirep_status['Status'] == 'Within 45 mins' %}
+            <div class="block green" title="{{ pirep_status['Status'] }}">
+              <b>{{ nas_id }}</b>
+          {% elif pirep_status['Status'] == 'Within 60 mins' %}
+            <div class="block yellow" title="{{ pirep_status['Status'] }}">
+              <b>{{ nas_id }}</b>
+          {% else %}
+            <div class="block red" title="{{ pirep_status['Status'] }}">
+              <b>{{ nas_id }}</b>
+          {% endif %}
+        </div>
+      {% endif %}
+    {% endfor %}
+  </div>
+{% endif %}
+</div>
+</main>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
 </html>

@@ -20,6 +20,7 @@
   /* Header Styles */
   header {
     position: sticky;
+    z-index: 999;
     top: 0;
     height: fit-content;
     background: var(--header-background);
@@ -63,14 +64,14 @@
   
   .nav ul li ul.subnav {
     display: none;
-    position: static;
+    position: absolute;
     top: 100%;
     left: 0;
     background-color: #333;
     padding: 1em;
     border-radius: 5px;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-    z-index: -1;
+    z-index: 2;
   }
   
   .nav ul li:hover ul.subnav {
@@ -162,6 +163,29 @@
       font-weight: bold;
       text-align: left;
     }
+  }
+
+  .area-blocks-container {
+    position: relative;
+    height: 100vh;
+  }
+
+  .split {
+    height: 100%;
+    width: 50%;
+    position: absolute;
+    z-index: 1;
+    top: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+  
+  .left {
+    left: 0;
+  }
+  
+  .right {
+    right: 0;
   }
   
   /* Block Container Styles */

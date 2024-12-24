@@ -2,6 +2,42 @@
 import pandas as pd
 import requests
 from io import StringIO
+from shapely import is_valid
+from shapely.geometry import Point, Polygon
+
+import config
+
+def find_polygons(lat, lon, alt):
+    found_poly = []
+
+    if lon >= 0:
+        lon = -180-(180-lon)
+        #print(lon)
+
+    point = Point(lat, lon)
+    
+    area = None
+    for area_name, area_data in config.areas.items():
+        for sector_number, sector_polygon in area_data["sectors"].items():
+            #print(f"Testing {point} in {area_name},{sector_number}")
+            poly = Polygon(sector_polygon)
+            #print(sector_number, is_valid(poly))
+            if poly.contains(point):
+                found_poly.append(sector_number)
+    #print(found_poly, point, alt)
+
+    if len(found_poly) > 1:
+        if alt >= 29000:
+            found_poly = max(found_poly)
+        else:
+            found_poly = min(found_poly)
+    elif len(found_poly) == 1:
+        found_poly = found_poly[0]
+    else:
+        return None
+
+        
+    return found_poly
 
 def fetch_metar_data():
     url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=%40AK&hoursBeforeNow=2&format=csv&mostRecent=false&mostRecentForEachStation=postfilter"
@@ -13,6 +49,10 @@ def fetch_metar_data():
     # Remove "SM" from the visibility column before converting to numeric
     data['visibility_statute_mi'] = data['visibility_statute_mi'].str.replace('+', '', regex=False)
     data['visibility_statute_mi'] = pd.to_numeric(data['visibility_statute_mi'], errors='coerce')
+
+    #print(data)
+
+
 
     # Check for BKN or OVC layers at or below 5000 ft
     def check_cloud_layers(row):
@@ -42,6 +82,8 @@ def fetch_metar_data():
         visibility = row['visibility_statute_mi']
         lowest_ceiling = check_cloud_layers(row)
         weather_condition = check_weather_conditions(row)
+        sector_number = find_polygons(row['latitude'], row['longitude'], 0)
+        
 
         if pd.notna(visibility) and visibility <= 3 or lowest_ceiling or weather_condition:
             filtered_stations.append({
@@ -49,9 +91,10 @@ def fetch_metar_data():
                 'visibility': visibility if pd.notna(visibility) else "N/A",
                 'ceiling_type': lowest_ceiling[0] if lowest_ceiling else "N/A",
                 'ceiling_altitude': lowest_ceiling[1] if lowest_ceiling else "N/A",
-                'wx_string': row['wx_string'] if pd.notna(row['wx_string']) else "N/A"
+                'wx_string': row['wx_string'] if pd.notna(row['wx_string']) else "N/A",
+                'sector': sector_number
             })
 
     
-
+    #print(filtered_stations)
     return filtered_stations
