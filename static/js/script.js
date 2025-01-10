@@ -45,30 +45,61 @@ function updatePirepTable(pireps) {
 
 // Function to update the block container
 function updateBlockContainer(areaData) {
-    const blockContainer = document.querySelector('.block-container');
+    const blockContainer = document.querySelector('.area-blocks-container');
     blockContainer.innerHTML = '';
-    for (const nasId in areaData.pirep_status) {
-        const pirepStatus = areaData.pirep_status[nasId];
+
+    // Create containers for split left and right
+    const leftContainer = document.createElement('div');
+    leftContainer.className = 'split left';
+    leftContainer.innerHTML = '<h3>Left Area</h3>';
+
+    const rightContainer = document.createElement('div');
+    rightContainer.className = 'split right';
+    rightContainer.innerHTML = '<h3>Right Area</h3>';
+
+    const leftSectors = [5, 6, 4, 15, 16];
+    const rightSectors = [3, 9, 13 ,7 , 8];
+
+    for (const nasId in areaData) {
+        const pirepStatus = areaData[nasId].Status;
         let blockClass = '';
         let title = '';
-        if (pirepStatus['Status'] === 'Within 45 mins') {
+        //console.log(pirepStatus)
+
+        // Determine block color and title based on status
+        if (pirepStatus === 'Within 45 mins') {
             blockClass = 'green';
-            title = pirepStatus['Status'];
-        } else if (pirepStatus['Status'] === 'Within 60 mins') {
+            title = pirepStatus;
+        } else if (pirepStatus === 'Within 60 mins') {
             blockClass = 'yellow';
-            title = pirepStatus['Status'];
+            title = pirepStatus;
         } else {
-            blockClass ='red';
-            title = pirepStatus['Status'];
+            blockClass = 'red';
+            title = pirepStatus;
         }
+
+        // Create the block element
         const blockHtml = `
             <div class="block ${blockClass}" title="${title}">
                 <b>${nasId}</b>
             </div>
         `;
-        blockContainer.innerHTML += blockHtml;
+
+        // Append the block to the appropriate split container
+        
+        if (leftSectors.includes(areaData[nasId].Sector)) { // Example condition for Left or Right
+            leftContainer.innerHTML += blockHtml;
+        } else if(rightSectors.includes(areaData[nasId].Sector)) {
+            rightContainer.innerHTML += blockHtml;
+        }
     }
+
+    // Append split containers to the main block container
+    blockContainer.appendChild(leftContainer);
+    blockContainer.appendChild(rightContainer);
+    //console.log("updated blocks")
 }
+
 
 // Function to fetch updated data
 function fetchUpdatedData(page) {
@@ -97,9 +128,10 @@ function fetchUpdatedData(page) {
                   }
               }
           } else if (page.startsWith('area-block-')) {
-              let area = page.split('-')[1];
+              let area = page.split('-')[2];
               // Update block container
               updateBlockContainer(data.areas_data[area].pirep_status);
+              //console.log("called for update with:", data.areas_data[area].pirep_status)
           } else {
               let area = page;
               // Update METAR and PIREP tables
