@@ -1,6 +1,7 @@
 from datetime import datetime
 from io import StringIO
 
+import numpy as np
 import pandas as pd
 import requests
 from shapely import is_valid
@@ -95,15 +96,18 @@ def fetch_pirep_data():
         df = pd.read_csv(StringIO(response.text), skiprows=5, on_bad_lines='warn')
         df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5, on_bad_lines='warn')
 
-        if not df.empty or not df_pasy.empty:
+        if not df.empty and not df_pasy.empty:
             df = pd.concat([df, df_pasy], ignore_index=True)
-        else:
-            df = df
+        elif df.empty:
+            df = df_pasy
+        # If df_pasy is empty, df remains unchanged
 
     except ValueError as e:
         print(f"Failed to parse CSV: {e}")
         return []
 
+    df.replace('NaN', np.nan, inplace=True)
+    
     pireps = []
 
     for _, row in df.iterrows():
