@@ -44,18 +44,18 @@ function updatePirepTable(pireps) {
 }
 
 // Function to update the block container
-function updateBlockContainer(areaData) {
+function updateBlockContainer(areaData, area) {
     const blockContainer = document.querySelector('.area-blocks-container');
     blockContainer.innerHTML = '';
 
     // Create containers for split left and right
     const leftContainer = document.createElement('div');
     leftContainer.className = 'split left';
-    leftContainer.innerHTML = '<h3>Left Area</h3>';
+    leftContainer.innerHTML = `<h3>${area} Area (Left)</h3>`;
 
     const rightContainer = document.createElement('div');
     rightContainer.className = 'split right';
-    rightContainer.innerHTML = '<h3>Right Area</h3>';
+    rightContainer.innerHTML = `<h3>${area} Area (Right)</h3>`;
 
     const leftSectors = [5, 6, 4, 15, 16];
     const rightSectors = [3, 9, 13 ,7 , 8];
@@ -130,7 +130,7 @@ function fetchUpdatedData(page) {
           } else if (page.startsWith('area-block-')) {
               let area = page.split('-')[2];
               // Update block container
-              updateBlockContainer(data.areas_data[area].pirep_status);
+              updateBlockContainer(data.areas_data[area].pirep_status, area);
               //console.log("called for update with:", data.areas_data[area].pirep_status)
           } else {
               let area = page;

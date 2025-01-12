@@ -11,20 +11,15 @@ def find_polygons(lat, lon, alt):
     found_poly = []
 
     if lon >= 0:
-        lon = -180-(180-lon)
-        #print(lon)
-
+        lon = -180 - (180 - lon)
     point = Point(lat, lon)
     
     area = None
     for area_name, area_data in config.areas.items():
         for sector_number, sector_polygon in area_data["sectors"].items():
-            #print(f"Testing {point} in {area_name},{sector_number}")
             poly = Polygon(sector_polygon)
-            #print(sector_number, is_valid(poly))
             if poly.contains(point):
                 found_poly.append(sector_number)
-    #print(found_poly, point, alt)
 
     if len(found_poly) > 1:
         if alt >= 29000:
@@ -36,7 +31,6 @@ def find_polygons(lat, lon, alt):
     else:
         return None
 
-        
     return found_poly
 
 def fetch_metar_data():
@@ -49,10 +43,6 @@ def fetch_metar_data():
     # Remove "SM" from the visibility column before converting to numeric
     data['visibility_statute_mi'] = data['visibility_statute_mi'].str.replace('+', '', regex=False)
     data['visibility_statute_mi'] = pd.to_numeric(data['visibility_statute_mi'], errors='coerce')
-
-    #print(data)
-
-
 
     # Check for BKN or OVC layers at or below 5000 ft
     def check_cloud_layers(row):
@@ -95,6 +85,4 @@ def fetch_metar_data():
                 'sector': sector_number
             })
 
-    
-    #print(filtered_stations)
     return filtered_stations

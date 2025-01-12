@@ -206,7 +206,6 @@ def area_block(area_name):
 
     # Fetch METAR and PIREP data
     stations = fetch_metar_data()
-    #print(stations)
     pireps = fetch_pirep_data()
 
     # Initialize the data structure for areas
@@ -226,13 +225,13 @@ def area_block(area_name):
             for airport in config.airport_data:
                 if airport['ICAO ID'] == station['station_id'] and airport['Area'] == area:
                     area_stations.append((airport, station))
-        #print(area_stations)
+       
         # Sort stations by priority (based on the NAS ID in the priority list)
         area_stations.sort(key=lambda x: area_priority.index(x[0]['NAS ID']) if x[0]['NAS ID'] in area_priority else len(area_priority))
         
         # Filter the PIREPs based on the area
         area_pireps = [pirep for pirep in pireps if pirep['Area'] == area]
-        #print(area_pireps)
+       
 
         # Initialize a dictionary to store the PIREP requirement status for each station
         station_pirep_status = {}
@@ -244,10 +243,7 @@ def area_block(area_name):
             
             # Sort PIREPs by time in descending order (newest first)
             station_pireps.sort(key=lambda x: x['Time'], reverse=True)
-
-            #print(station)
             
-
             # Check if there are any PIREPs for the station
             if station_pireps:
                 # Get the most recent PIREP
@@ -261,7 +257,6 @@ def area_block(area_name):
                 latest_pirep = None
                 time_diff = None
                 
-            #print(station[0])
             station_pirep_status[station[0]['NAS ID']] = {
                 'Latest PIREP': latest_pirep,
                 'Time Diff': time_diff,
@@ -277,8 +272,6 @@ def area_block(area_name):
                 'pirep_status': station_pirep_status,
                 
             }
-            #print("Area Data:", area_data) # <--- Add this print statement
-            #print("Station PIREP Status:", station_pirep_status)
             break
 
     # Get Zulu time for the display
@@ -286,8 +279,6 @@ def area_block(area_name):
     zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
 
     # Render the area_block.html template with the area data
-    #print("Rendering Template with Area Data:", area_data)
-    #print("Area Data:", area_data)
     return render_template('area_block.html', 
                            area_name=area_name, 
                            area_data=area_data, 

@@ -50,7 +50,7 @@
       <div class="area-blocks-container">
         {% if area_name == 'NORTH' %}
           <div class="split left">
-            <h3>North Area (Left)</h3>
+            <h3>{{area_name}} Area (Left)</h3>
             <div class="block-container">
               {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
                 {% if pirep_status['Sector'] in [4, 15, 16] %}
@@ -70,7 +70,7 @@
           </div>
         </div>
         <div class="split right">
-          <h3>North Area (Right)</h3>
+          <h3>{{area_name}} Area (Right)</h3>
           <div class="block-container">
             {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
               {% if pirep_status['Sector'] in [3, 9, 13] %}
@@ -91,7 +91,7 @@
       </div>
     {% elif area_name == 'SOUTH' %}
       <div class="split left">
-        <h3>South Area (Left)</h3>
+        <h3>{{area_name}} Area (Left)</h3>
         <div class="block-container">
           {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
             {% if pirep_status['Sector'] in [5, 6] %}
@@ -111,7 +111,7 @@
       </div>
     </div>
     <div class="split right">
-      <h3>South Area (Right)</h3>
+      <h3>{{area_name}} Area (Right)</h3>
       <div class="block-container">
         {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
           {% if pirep_status['Sector'] in [7, 8] %}

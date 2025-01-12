@@ -18,23 +18,17 @@ def find_polygons(lat, lon, alt):
     found_poly = []
 
     if lon >= 0:
-        lon = -180-(180-lon)
-        #print(lon)
-
+        lon = -180 - (180 - lon)
     point = Point(lat, lon)
     
 
     area = None
     for area_name, area_data in config.areas.items():
         for sector_number, sector_polygon in area_data["sectors"].items():
-            #print(f"Testing {point} in {area_name},{sector_number}")
             poly = Polygon(sector_polygon)
-            #print(sector_number, is_valid(poly))
             if poly.contains(point):
                 found_poly.append(sector_number)
-    #print(found_poly, point, alt)
         
-
     if len(found_poly) > 1:
         if alt >= 29000:
             found_poly = max(found_poly)
@@ -51,7 +45,6 @@ def find_polygons(lat, lon, alt):
                 area = area_name
                 break
 
-    #print(f"found in {found_poly} in {area}")
     return found_poly
 
 def extract_apt(raw_text):
@@ -90,7 +83,6 @@ def fetch_pirep_data():
     :return: List of PIREPs with relevant information
     """
     url = config.get_pirep_url()
-    #print(f"Fetching PIREP data from URL: {url}")  # Debugging
     response = requests.get(url)
     response_pasy = requests.get(config.pasy_url)
 
@@ -102,25 +94,19 @@ def fetch_pirep_data():
     try:
         df = pd.read_csv(StringIO(response.text), skiprows=5, on_bad_lines='warn')
         df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5, on_bad_lines='warn')
-        #print(df_pasy)
 
         if not df.empty or not df_pasy.empty:
             df = pd.concat([df, df_pasy], ignore_index=True)
-            #print(df)
         else:
             df = df
-        #print(df)
 
     except ValueError as e:
         print(f"Failed to parse CSV: {e}")
         return []
-    #print(f"DataFrame columns: {df.columns}")  # Debugging
-    #print(f"DataFrame head:\n{df.head()}")  # Debugging
 
     pireps = []
 
     for _, row in df.iterrows():
-        #print(f"Processing row: {row}")  # Debugging
         try:
             lat = float(row['latitude'])
             lon = float(row['longitude'])
@@ -129,7 +115,6 @@ def fetch_pirep_data():
             apt = extract_apt(raw_text)  # Extract the APT
             rmk = extract_rmk(raw_text)# Extract the RMK
             loc = extract_loc(raw_text)  # Extract the LOC
-            #print(f"Extracted (apt: {apt}, alt: {alt})")  # Debugging
 
             sector_number = find_polygons(lat, lon, alt)
 
@@ -152,15 +137,11 @@ def fetch_pirep_data():
                             "APT": apt, 
                             "Sector": sector_number
                         })
-                    #print(f"PIREP found in:{area_name}")
                     break
-
-            #print(pireps)
 
         except ValueError as ve:
             print(f"Could not convert string to float: {ve}, row: {row}")  # Debugging
         except Exception as e:
             print(f"Unexpected error processing row: {e}")  # Debugging
 
-    #print(f"Processed PIREPs: {pireps}")  # Debugging
     return pireps
