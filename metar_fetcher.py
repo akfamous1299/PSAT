@@ -1,4 +1,5 @@
 # metar_fetcher.py
+import numpy as np
 import pandas as pd
 import requests
 from io import StringIO
@@ -39,6 +40,7 @@ def fetch_metar_data():
 
     # Load the CSV data, skipping the first 5 rows to get to the header
     data = pd.read_csv(StringIO(response.text), skiprows=5)
+    
 
     # Remove "SM" from the visibility column before converting to numeric
     data['visibility_statute_mi'] = data['visibility_statute_mi'].str.replace('+', '', regex=False)

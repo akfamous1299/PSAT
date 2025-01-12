@@ -87,6 +87,8 @@ def fetch_pirep_data():
     response = requests.get(url)
     response_pasy = requests.get(config.pasy_url)
 
+
+
     if response.status_code != 200 or response_pasy.status_code != 200:
         print("Failed to fetch PIREP data.")
         return []
@@ -106,7 +108,7 @@ def fetch_pirep_data():
         print(f"Failed to parse CSV: {e}")
         return []
 
-    df.replace('NaN', np.nan, inplace=True)
+    df.fillna(-1, inplace=True)
     
     pireps = []
 
