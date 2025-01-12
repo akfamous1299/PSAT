@@ -85,7 +85,7 @@ def fetch_metar_data():
         sector_number = find_polygons(row['latitude'], row['longitude'], 0)
         
 
-        if pd.notna(visibility) and visibility <= 3 or lowest_ceiling or weather_condition:
+        if pd.notna(visibility) and visibility <= 5 or lowest_ceiling or weather_condition:
             filtered_stations.append({
                 'station_id': row['station_id'],
                 'visibility': visibility if pd.notna(visibility) else "N/A",

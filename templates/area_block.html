@@ -15,28 +15,28 @@
         <ul>
           <li><a href="/">OMIC</a></li>
           <li>
-            <a href="/area/NORTH">North</a>
+            <a href="#">North</a>
             <ul class="subnav">
               <li><a href="/area/NORTH">North Area</a></li>
               <li><a href="/area-block/NORTH">North Blocks</a></li>
             </ul>
           </li>
           <li>
-            <a href="/area/SOUTH">South</a>
+            <a href="#">South</a>
             <ul class="subnav">
               <li><a href="/area/SOUTH">South Area</a></li>
               <li><a href="/area-block/SOUTH">South Blocks</a></li>
             </ul>
           </li>
           <li>
-            <a href="/area/HIGH">High</a>
+            <a href="#">High</a>
             <ul class="subnav">
               <li><a href="/area/HIGH">High Area</a></li>
               <li><a href="/area-block/HIGH">High Blocks</a></li>
             </ul>
           </li>
           <li>
-            <a href="/area/ATOP">ATOP</a>
+            <a href="#">ATOP</a>
             <ul class="subnav">
               <li><a href="/area/ATOP">ATOP Area</a></li>
               <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
@@ -51,8 +51,29 @@
         {% if area_name == 'NORTH' %}
           <div class="split left">
             <h3>North Area (Left)</h3>
+            <div class="block-container">
+              {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+                {% if pirep_status['Sector'] in [4, 15, 16] %}
+                  {% if pirep_status['Status'] == 'Within 45 mins' %}
+                    <div class="block green" title="{{ pirep_status['Status'] }}">
+                      <b>{{ nas_id }}</b>
+                  {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                    <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                      <b>{{ nas_id }}</b>
+                  {% else %}
+                    <div class="block red" title="{{ pirep_status['Status'] }}">
+                      <b>{{ nas_id }}</b>
+                  {% endif %}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="split right">
+          <h3>North Area (Right)</h3>
+          <div class="block-container">
             {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-              {% if pirep_status['Sector'] in [4, 15, 16] %}
+              {% if pirep_status['Sector'] in [3, 9, 13] %}
                 {% if pirep_status['Status'] == 'Within 45 mins' %}
                   <div class="block green" title="{{ pirep_status['Status'] }}">
                     <b>{{ nas_id }}</b>
@@ -67,10 +88,13 @@
             {% endif %}
           {% endfor %}
         </div>
-        <div class="split right">
-          <h3>North Area (Right)</h3>
+      </div>
+    {% elif area_name == 'SOUTH' %}
+      <div class="split left">
+        <h3>South Area (Left)</h3>
+        <div class="block-container">
           {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-            {% if pirep_status['Sector'] in [3, 9, 13] %}
+            {% if pirep_status['Sector'] in [5, 6] %}
               {% if pirep_status['Status'] == 'Within 45 mins' %}
                 <div class="block green" title="{{ pirep_status['Status'] }}">
                   <b>{{ nas_id }}</b>
@@ -85,11 +109,12 @@
           {% endif %}
         {% endfor %}
       </div>
-    {% elif area_name == 'SOUTH' %}
-      <div class="split left">
-        <h3>South Area (Left)</h3>
+    </div>
+    <div class="split right">
+      <h3>South Area (Right)</h3>
+      <div class="block-container">
         {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-          {% if pirep_status['Sector'] in [5, 6] %}
+          {% if pirep_status['Sector'] in [7, 8] %}
             {% if pirep_status['Status'] == 'Within 45 mins' %}
               <div class="block green" title="{{ pirep_status['Status'] }}">
                 <b>{{ nas_id }}</b>
@@ -104,23 +129,6 @@
         {% endif %}
       {% endfor %}
     </div>
-    <div class="split right">
-      <h3>South Area (Right)</h3>
-      {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-        {% if pirep_status['Sector'] in [7, 8] %}
-          {% if pirep_status['Status'] == 'Within 45 mins' %}
-            <div class="block green" title="{{ pirep_status['Status'] }}">
-              <b>{{ nas_id }}</b>
-          {% elif pirep_status['Status'] == 'Within 60 mins' %}
-            <div class="block yellow" title="{{ pirep_status['Status'] }}">
-              <b>{{ nas_id }}</b>
-          {% else %}
-            <div class="block red" title="{{ pirep_status['Status'] }}">
-              <b>{{ nas_id }}</b>
-          {% endif %}
-        </div>
-      {% endif %}
-    {% endfor %}
   </div>
 {% endif %}
 </div>
