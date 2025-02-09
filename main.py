@@ -8,7 +8,6 @@ import pytz
 
 app = Flask(__name__)
 
-
 # Route to display METAR and PIREP data for each area
 @app.route('/')
 def index():
@@ -51,7 +50,6 @@ def index():
             # Sort PIREPs by time in descending order (newest first)
             station_pireps.sort(key=lambda x: x['Time'], reverse=True)
             
-
             # Check if there are any PIREPs for the station
             if station_pireps:
                 # Get the most recent PIREP
