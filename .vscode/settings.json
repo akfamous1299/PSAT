@@ -28,7 +28,8 @@
         "ENV{,/**}",
         "env.bak{,/**}",
         "venv.bak{,/**}",
-        ".vscode{,/**}"
+        ".vscode{,/**}",
+        "Dockerfile{,/**}"
     ],
     "appService.defaultWebAppToDeploy": "/subscriptions/5fc061b9-4f8f-4553-8247-7d81b8dc10c6/resourceGroups/ZAN-PSAT2/providers/Microsoft.Web/sites/ZAN-PSAT",
     "appService.deploySubpath": ".",
