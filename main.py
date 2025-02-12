@@ -283,5 +283,3 @@ def area_block(area_name):
                            zulu_time=zulu_time)
 
 
-if __name__ == "__main__":
-    app.run()
