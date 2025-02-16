@@ -272,7 +272,7 @@ th {
   }
   .north {
       grid-column: 1;
-      grid-row: 1 / 2;
+      grid-row: 1 / 5;
       height: fit-content;
   }
   .south, .atop {
