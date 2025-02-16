@@ -282,4 +282,7 @@ def area_block(area_name):
                            area_data=area_data, 
                            zulu_time=zulu_time)
 
+if __name__ == "__main__":
+    app.run()
+
 
