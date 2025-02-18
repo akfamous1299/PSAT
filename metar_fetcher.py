@@ -37,6 +37,7 @@ def find_polygons(lat, lon, alt):
 def fetch_metar_data():
     url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=%40AK&hoursBeforeNow=2&format=csv&mostRecent=false&mostRecentForEachStation=postfilter"
     response = requests.get(url)
+    
 
     # Load the CSV data, skipping the first 5 rows to get to the header
     data = pd.read_csv(StringIO(response.text), skiprows=5)
@@ -45,6 +46,7 @@ def fetch_metar_data():
     data['visibility_statute_mi'] = data['visibility_statute_mi'].str.replace('+', '', regex=False)
     data['visibility_statute_mi'] = pd.to_numeric(data['visibility_statute_mi'], errors='coerce')
 
+    data['elevation'] = data['elevation_m'].apply(lambda x: x * 3.28084)
     # Check for BKN or OVC layers at or below 5000 ft
     def check_cloud_layers(row):
         cloud_layers = [
@@ -83,6 +85,7 @@ def fetch_metar_data():
                 'ceiling_type': lowest_ceiling[0] if lowest_ceiling else "N/A",
                 'ceiling_altitude': lowest_ceiling[1] if lowest_ceiling else "N/A",
                 'wx_string': row['wx_string'] if pd.notna(row['wx_string']) else "N/A",
+                'elevation': row['elevation'],
                 'sector': sector_number
             })
 

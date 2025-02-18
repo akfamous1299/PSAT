@@ -137,6 +137,7 @@ def fetch_pirep_data():
                             "ACFT": row['aircraft_ref'],
                             "ALT": alt,
                             "PIREP Remarks": rmk,
+                            "Raw Text": row['raw_text'],
                             "WX String": row['wx_string'] if pd.notna(row['wx_string']) else "N/A",
                             "PIREP Text": row['raw_text'],
                             "Area": area_name,

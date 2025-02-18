@@ -81,9 +81,7 @@
               <th>Location</th>
               <th>Time</th>
               <th>Type</th>
-              <th>Alt</th>
-              <th>ACFT</th>
-              <th>PIREP RMK</th>
+              <th>Raw Text</th>
             </tr>
           </thead>
           <tbody>
@@ -92,9 +90,7 @@
               <td>{{ pirep['Location'] }}</td>
               <td>{{ pirep['Time'] }}</td>
               <td>{{ pirep['Type'] }}</td>
-              <td>{{ pirep['ALT'] }}</td>
-              <td>{{ pirep['ACFT'] }}</td>
-              <td>{{ pirep['PIREP Remarks'] }}</td>
+              <td>{{ pirep['Raw Text'] }}</td>
             </tr>
             {% endfor %}
           </tbody>
