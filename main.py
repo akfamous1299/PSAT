@@ -18,8 +18,7 @@ def get_area_data(stations, pireps, areas):
         area_pireps = [pirep for pirep in pireps if pirep['Area'] == area]
         station_pirep_status = {}
         for station in area_stations:
-            #filter pireps by station and elevation
-            station_pireps = [pirep for pirep in area_pireps if pirep['Location'] == station[0]['NAS ID'] and abs(pirep['ALT'] - station[0]['elevation']) <= 10000]
+            station_pireps = [pirep for pirep in area_pireps if pirep['Location'] == station[0]['NAS ID']]
             station_pireps.sort(key=lambda x: x['Time'], reverse=True)
             if station_pireps:
                 latest_pirep = station_pireps[0]
