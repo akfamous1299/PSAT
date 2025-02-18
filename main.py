@@ -7,7 +7,6 @@ from datetime import datetime
 import pytz
 
 app = Flask(__name__)
-#test change
 # Route to display METAR and PIREP data for each area
 @app.route('/')
 def index():
