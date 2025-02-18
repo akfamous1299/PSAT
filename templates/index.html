@@ -13,6 +13,7 @@
   <body>
     <header>
       <h3 class="logo">PSAT</h3>
+      <button id="easter-egg-button" style="display:none;">Easter Egg</button>
       <div class="zulu-time" id="time">{{ zulu_time }}</div>
       <nav class="nav">
         <ul>
@@ -82,6 +83,10 @@
         </div>
         {% endif %}
         {% endfor %}
+      </div>
+      <div id="easter-egg-popup" class="easter-egg-popup">
+        <p>How hard would it be to...</p>
+        <button id="close-popup">Close</button>
       </div>
     </main>
     <script src="{{ url_for('static', filename='js/script.js') }}"></script>

@@ -18,6 +18,8 @@
   --section-text-color: #CED0CE; /* Added variable for section text color */
   --section-subtext-color: #CED0CE; /* Added variable for section subtext color */
   --border-color: #CED0CE; /* Added variable for border color */
+  --rs-bg-color: #11b8fb; /* Added variable for RS background color */
+  --ka-txt-color: #abacae; /* Added variable for KA text color */
 }
 
 /* Global Styles */
@@ -295,4 +297,27 @@ th {
   padding: 1em;
   border-radius: 5px;
   box-shadow: var(--box-shadow);
+}
+
+.easter-egg-popup {
+  display: none;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: var(--rs-bg-color);
+  color: var(--ka-txt-color);
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.easter-egg-popup p {
+  margin: 0;
+  font-size: 1.2em;
+}
+
+.easter-egg-popup button {
+  margin-top: 10px;
+  padding: 5px 10px;
 }

@@ -162,3 +162,16 @@ fetchUpdatedData(currentPage);
 
 // Update data every 30 seconds
 setInterval(() => fetchUpdatedData(currentPage), UPDATE_INTERVAL);
+
+// Easter egg functionality
+document.querySelector('.logo').addEventListener('click', () => {
+    document.getElementById('easter-egg-button').click();
+});
+
+document.getElementById('easter-egg-button').addEventListener('click', () => {
+    document.getElementById('easter-egg-popup').style.display = 'block';
+});
+
+document.getElementById('close-popup').addEventListener('click', () => {
+    document.getElementById('easter-egg-popup').style.display = 'none';
+});
