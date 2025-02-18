@@ -135,8 +135,11 @@ function fetchUpdatedData(page) {
           } else {
               let area = page;
               // Update METAR and PIREP tables
+              if (area !== "HIGH") {
               updateMetarTable(data.areas_data[area].stations);
+              }
               updatePirepTable(data.areas_data[area].pireps);
+              console.log("called for update with:", data.areas_data[area].pireps)
           }
       })
  .catch(error => {
