@@ -34,9 +34,7 @@ function updatePirepTable(pireps) {
                 <td>${pirep['Location']}</td>
                 <td>${pirep['Time']}</td>
                 <td>${pirep['Type']}</td>
-                <td>${pirep['ALT']}</td>
-                <td>${pirep['ACFT']}</td>
-                <td>${pirep['PIREP Remarks']}</td>
+                <td>${pirep['Raw Text']}</td>
             </tr>
         `;
         pirepTableBody.innerHTML += row;
