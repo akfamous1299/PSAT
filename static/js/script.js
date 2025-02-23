@@ -9,6 +9,10 @@ function updateZuluTime(zuluTime) {
 
 // Function to update the METAR table
 function updateMetarTable(stations) {
+    if (!Array.isArray(stations)) {
+        console.error('Invalid stations data');
+        return;
+    }
     const metarTableBody = document.querySelector('.metar-table tbody');
     metarTableBody.innerHTML = '';
     stations.forEach(station => {
@@ -26,6 +30,10 @@ function updateMetarTable(stations) {
 
 // Function to update the PIREP table
 function updatePirepTable(pireps) {
+    if (!Array.isArray(pireps)) {
+        console.error('Invalid pireps data');
+        return;
+    }
     const pirepTableBody = document.querySelector('.pirep-table tbody');
     pirepTableBody.innerHTML = '';
     pireps.forEach(pirep => {
@@ -34,7 +42,7 @@ function updatePirepTable(pireps) {
                 <td>${pirep['Location']}</td>
                 <td>${pirep['Time']}</td>
                 <td>${pirep['Type']}</td>
-                <td>${pirep['Raw Text']}</td>
+                <td>${pirep['PIREP Text']}</td>
             </tr>
         `;
         pirepTableBody.innerHTML += row;
@@ -43,6 +51,10 @@ function updatePirepTable(pireps) {
 
 // Function to update the block container
 function updateBlockContainer(areaData, area) {
+    if (!areaData || typeof areaData !== 'object') {
+        console.error('Invalid area data');
+        return;
+    }
     const blockContainer = document.querySelector('.area-blocks-container');
     blockContainer.innerHTML = '';
 
@@ -56,7 +68,7 @@ function updateBlockContainer(areaData, area) {
     rightContainer.innerHTML = `<h3>${area} Area (Right)</h3>`;
 
     const leftSectors = [5, 6, 4, 15, 16];
-    const rightSectors = [3, 9, 13 ,7 , 8];
+    const rightSectors = [3, 9, 13, 7, 8];
 
     for (const nasId in areaData) {
         const pirepStatus = areaData[nasId].Status;
@@ -84,10 +96,10 @@ function updateBlockContainer(areaData, area) {
         `;
 
         // Append the block to the appropriate split container
-        
+
         if (leftSectors.includes(areaData[nasId].Sector)) { // Example condition for Left or Right
             leftContainer.innerHTML += blockHtml;
-        } else if(rightSectors.includes(areaData[nasId].Sector)) {
+        } else if (rightSectors.includes(areaData[nasId].Sector)) {
             rightContainer.innerHTML += blockHtml;
         }
     }
@@ -99,6 +111,10 @@ function updateBlockContainer(areaData, area) {
 }
 
 function showError(message) {
+    const existingError = document.querySelector('.error-message');
+    if (existingError) {
+        existingError.remove();
+    }
     const errorDiv = document.createElement('div');
     errorDiv.className = 'error-message';
     errorDiv.textContent = message;
@@ -108,9 +124,13 @@ function showError(message) {
 
 // Function to fetch updated data
 function fetchUpdatedData(page) {
+    if (!page) {
+        console.error('Invalid page parameter');
+        return;
+    }
     // Add loading state
     document.body.classList.add('loading');
-    
+
     fetch(`/fetch-updated-data/${page}`)
         .then(response => {
             if (!response.ok) {
@@ -123,12 +143,12 @@ function fetchUpdatedData(page) {
             if (page === "index") {
                 // Update areas data
                 for (let area in data.areas_data) {
-                    if (area!== "HIGH") {
+                    if (area !== "HIGH") {
                         let tbody = document.getElementById(`stations-${area}`);
                         tbody.innerHTML = '';
                         for (let stationID in data.areas_data[area].pirep_status) {
                             let station = data.areas_data[area].pirep_status[stationID];
-                            let latestPirepTime = station?.['Latest PIREP']?.['Time']?? 'None';
+                            let latestPirepTime = station?.['Latest PIREP']?.['Time'] ?? 'None';
                             let row = `
                                 <tr>
                                     <td>${stationID}</td>
@@ -149,7 +169,7 @@ function fetchUpdatedData(page) {
                 let area = page;
                 // Update METAR and PIREP tables
                 if (area !== "HIGH") {
-                updateMetarTable(data.areas_data[area].stations);
+                    updateMetarTable(data.areas_data[area].stations);
                 }
                 updatePirepTable(data.areas_data[area].pireps);
                 console.log("called for update with:", data.areas_data[area].pireps)
@@ -172,7 +192,7 @@ function getCurrentPage() {
     } else if (currentUrl.startsWith('/area-block/')) {
         return 'area-block-' + currentUrl.split('/').pop();
     }
-    return currentUrl === '/'? 'index' : currentUrl.slice(1);
+    return currentUrl === '/' ? 'index' : currentUrl.slice(1);
 }
 
 // Initial data fetch
@@ -182,15 +202,29 @@ fetchUpdatedData(currentPage);
 // Update data every 30 seconds
 setInterval(() => fetchUpdatedData(currentPage), UPDATE_INTERVAL);
 
-// Easter egg functionality
-document.querySelector('.logo').addEventListener('click', () => {
-    document.getElementById('easter-egg-button').click();
-});
+// Add error handling for event listeners
+window.addEventListener('load', () => {
+    const logoElement = document.querySelector('.logo');
+    const easterEggButton = document.getElementById('easter-egg-button');
+    const closePopupButton = document.getElementById('close-popup');
 
-document.getElementById('easter-egg-button').addEventListener('click', () => {
-    document.getElementById('easter-egg-popup').style.display = 'block';
-});
+    if (logoElement) {
+        logoElement.addEventListener('click', () => {
+            easterEggButton?.click();
+        });
+    }
 
-document.getElementById('close-popup').addEventListener('click', () => {
-    document.getElementById('easter-egg-popup').style.display = 'none';
+    if (easterEggButton) {
+        easterEggButton.addEventListener('click', () => {
+            const popup = document.getElementById('easter-egg-popup');
+            if (popup) popup.style.display = 'block';
+        });
+    }
+
+    if (closePopupButton) {
+        closePopupButton.addEventListener('click', () => {
+            const popup = document.getElementById('easter-egg-popup');
+            if (popup) popup.style.display = 'none';
+        });
+    }
 });

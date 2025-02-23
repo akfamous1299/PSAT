@@ -52,7 +52,7 @@ def find_polygons(lat, lon, alt):
                 area = area_name
                 break
             
-    print(found_poly)        
+    #print(found_poly)        
 
     return found_poly
 
@@ -144,8 +144,6 @@ def fetch_pirep_data():
                             "ACFT": row['aircraft_ref'],
                             "ALT": alt,
                             "PIREP Remarks": rmk,
-                            "Raw Text": row['raw_text'],
-                            "WX String": row['wx_string'] if pd.notna(row['wx_string']) else "N/A",
                             "PIREP Text": row['raw_text'],
                             "Area": area_name,
                             "APT": apt, 
@@ -157,5 +155,5 @@ def fetch_pirep_data():
             print(f"Could not convert string to float: {ve}, row: {row}")  # Debugging
         except Exception as e:
             print(f"Unexpected error processing row: {e}")  # Debugging
-
+    #print(pireps)
     return pireps

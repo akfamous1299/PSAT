@@ -1,110 +1,110 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ area_name }} Area Data</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ area_name }} Area Data</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+</head>
 
-  <body>
-    <header>
-      <h3 class="logo">PSAT</h3>
-      <button id="easter-egg-button" style="display:none;">Easter Egg</button>
-      <div class="zulu-time" id="time">{{ zulu_time }}</div>
-      <nav class="nav">
-        <ul>
-          <li><a href="/">OMIC</a></li>
-          <li>
-            <a href="#">North</a>
-            <ul class="subnav">
-              <li><a href="/area/NORTH">North Area</a></li>
-              <li><a href="/area-block/NORTH">North Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">South</a>
-            <ul class="subnav">
-              <li><a href="/area/SOUTH">South Area</a></li>
-              <li><a href="/area-block/SOUTH">South Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">High</a>
-            <ul class="subnav">
-              <li><a href="/area/HIGH">High Area</a></li>
-              <li><a href="/area-block/HIGH">High Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">ATOP</a>
-            <ul class="subnav">
-              <li><a href="/area/ATOP">ATOP Area</a></li>
-              <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <main class="container">
-      {% if area_name!= "HIGH" %} <!-- Conditional statement to check if not "HIGH" area -->
-      <section class="data-section">
-        <h2>METAR Stations</h2>
-        <table class="metar-table">
-          <thead>
-            <tr>
-              <th>NAS ID</th>
-              <th>Visibility (mi)</th>
-              <th>Ceiling (ft AGL)</th>
-              <th>Weather String</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for airport, station in stations %}
-            <tr>
-              <td>{{ airport['NAS ID'] }}</td>
-              <td>{{ station['visibility'] }}</td>
-              <td>{{ station['ceiling_altitude'] }}</td>
-              <td>{{ station['wx_string'] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </section>
-      {% endif %} <!-- Closing the if statement -->
+<body>
+  <header>
+    <h3 class="logo">PSAT</h3>
+    <button id="easter-egg-button" style="display:none;">Easter Egg</button>
+    <div class="zulu-time" id="time">{{ zulu_time }}</div>
+    <nav class="nav">
+      <ul>
+        <li><a href="/">OMIC</a></li>
+        <li>
+          <a href="#">North</a>
+          <ul class="subnav">
+            <li><a href="/area/NORTH">North Area</a></li>
+            <li><a href="/area-block/NORTH">North Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">South</a>
+          <ul class="subnav">
+            <li><a href="/area/SOUTH">South Area</a></li>
+            <li><a href="/area-block/SOUTH">South Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">High</a>
+          <ul class="subnav">
+            <li><a href="/area/HIGH">High Area</a></li>
+            <li><a href="/area-block/HIGH">High Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">ATOP</a>
+          <ul class="subnav">
+            <li><a href="/area/ATOP">ATOP Area</a></li>
+            <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    {% if area_name!= "HIGH" %} <!-- Conditional statement to check if not "HIGH" area -->
+    <section class="data-section">
+      <h2>METAR Stations</h2>
+      <table class="metar-table">
+        <thead>
+          <tr>
+            <th>NAS ID</th>
+            <th>Visibility (mi)</th>
+            <th>Ceiling (ft AGL)</th>
+            <th>Weather String</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for airport, station in stations %}
+          <tr>
+            <td>{{ airport['NAS ID'] }}</td>
+            <td>{{ station['visibility'] }}</td>
+            <td>{{ station['ceiling_altitude'] }}</td>
+            <td>{{ station['wx_string'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
+    {% endif %} <!-- Closing the if statement -->
 
-      <section class="data-section">
-        <h2>PIREP Data</h2>
-        <table class="pirep-table">
-          <thead>
-            <tr>
-              <th>Location</th>
-              <th>Time</th>
-              <th>Type</th>
-              <th>Raw Text</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for pirep in pireps %}
-            <tr>
-              <td>{{ pirep['Location'] }}</td>
-              <td>{{ pirep['Time'] }}</td>
-              <td>{{ pirep['Type'] }}</td>
-              <td>{{ pirep['Raw Text'] }}</td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-      </section>
+    <section class="data-section">
+      <h2>PIREP Data</h2>
+      <table class="pirep-table">
+        <thead>
+          <tr>
+            <th>Location</th>
+            <th>Time</th>
+            <th>Type</th>
+            <th>PIREP Text</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for pirep in pireps %}
+          <tr>
+            <td>{{ pirep['Location'] }}</td>
+            <td>{{ pirep['Time'] }}</td>
+            <td>{{ pirep['Type'] }}</td>
+            <td>{{ pirep['PIREP Text'] }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </section>
     </div>
     <div id="easter-egg-popup" class="easter-egg-popup">
       <p>How hard would it be to...</p>
       <button id="close-popup">Close</button>
     </div>
-    </main>
+  </main>
 
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  </body>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
 
 </html>
