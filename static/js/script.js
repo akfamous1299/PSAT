@@ -34,9 +34,7 @@ function updatePirepTable(pireps) {
                 <td>${pirep['Location']}</td>
                 <td>${pirep['Time']}</td>
                 <td>${pirep['Type']}</td>
-                <td>${pirep['ALT']}</td>
-                <td>${pirep['ACFT']}</td>
-                <td>${pirep['PIREP Remarks']}</td>
+                <td>${pirep['Raw Text']}</td>
             </tr>
         `;
         pirepTableBody.innerHTML += row;
@@ -100,52 +98,70 @@ function updateBlockContainer(areaData, area) {
     //console.log("updated blocks")
 }
 
+function showError(message) {
+    const errorDiv = document.createElement('div');
+    errorDiv.className = 'error-message';
+    errorDiv.textContent = message;
+    document.body.appendChild(errorDiv);
+    setTimeout(() => errorDiv.remove(), 5000);
+}
 
 // Function to fetch updated data
 function fetchUpdatedData(page) {
-  fetch(`/fetch-updated-data/${page}`)
-  .then(response => response.json())
-  .then(data => {
-          updateZuluTime(data.zulu_time);
-          if (page === "index") {
-              // Update areas data
-              for (let area in data.areas_data) {
-                  if (area!== "HIGH") {
-                      let tbody = document.getElementById(`stations-${area}`);
-                      tbody.innerHTML = '';
-                      for (let stationID in data.areas_data[area].pirep_status) {
-                          let station = data.areas_data[area].pirep_status[stationID];
-                          let latestPirepTime = station?.['Latest PIREP']?.['Time']?? 'None';
-                          let row = `
-                              <tr>
-                                  <td>${stationID}</td>
-                                  <td>${latestPirepTime}</td>
-                                  <td>${station.Status}</td>
-                              </tr>
-                          `;
-                          tbody.innerHTML += row;
-                      }
-                  }
-              }
-          } else if (page.startsWith('area-block-')) {
-              let area = page.split('-')[2];
-              // Update block container
-              updateBlockContainer(data.areas_data[area].pirep_status, area);
-              //console.log("called for update with:", data.areas_data[area].pirep_status)
-          } else {
-              let area = page;
-              // Update METAR and PIREP tables
-              if (area !== "HIGH") {
-              updateMetarTable(data.areas_data[area].stations);
-              }
-              updatePirepTable(data.areas_data[area].pireps);
-              console.log("called for update with:", data.areas_data[area].pireps)
-          }
-      })
- .catch(error => {
-          console.error('Error fetching updated data:', error);
-          // Display error message to user or retry fetch operation
-      });
+    // Add loading state
+    document.body.classList.add('loading');
+    
+    fetch(`/fetch-updated-data/${page}`)
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+            return response.json();
+        })
+        .then(data => {
+            updateZuluTime(data.zulu_time);
+            if (page === "index") {
+                // Update areas data
+                for (let area in data.areas_data) {
+                    if (area!== "HIGH") {
+                        let tbody = document.getElementById(`stations-${area}`);
+                        tbody.innerHTML = '';
+                        for (let stationID in data.areas_data[area].pirep_status) {
+                            let station = data.areas_data[area].pirep_status[stationID];
+                            let latestPirepTime = station?.['Latest PIREP']?.['Time']?? 'None';
+                            let row = `
+                                <tr>
+                                    <td>${stationID}</td>
+                                    <td>${latestPirepTime}</td>
+                                    <td>${station.Status}</td>
+                                </tr>
+                            `;
+                            tbody.innerHTML += row;
+                        }
+                    }
+                }
+            } else if (page.startsWith('area-block-')) {
+                let area = page.split('-')[2];
+                // Update block container
+                updateBlockContainer(data.areas_data[area].pirep_status, area);
+                //console.log("called for update with:", data.areas_data[area].pirep_status)
+            } else {
+                let area = page;
+                // Update METAR and PIREP tables
+                if (area !== "HIGH") {
+                updateMetarTable(data.areas_data[area].stations);
+                }
+                updatePirepTable(data.areas_data[area].pireps);
+                console.log("called for update with:", data.areas_data[area].pireps)
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            showError('Failed to fetch updated data. Please try again later.');
+        })
+        .finally(() => {
+            document.body.classList.remove('loading');
+        });
 }
 
 // Function to get the current page

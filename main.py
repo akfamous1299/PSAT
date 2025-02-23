@@ -5,11 +5,25 @@ from metar_fetcher import fetch_metar_data
 from pirep_fetcher import fetch_pirep_data
 from datetime import datetime
 import pytz
+import logging
+from logging.handlers import RotatingFileHandler
 
 app = Flask(__name__)
 app.json.sort_keys = False
 
-def get_area_data(stations, pireps, areas):
+# Setup logging
+handler = RotatingFileHandler('psat.log', maxBytes=10000, backupCount=3)
+handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+))
+app.logger.addHandler(handler)
+app.logger.setLevel(logging.INFO)
+
+def get_area_data(stations: list, pireps: list, areas: list) -> dict:
+    if not hasattr(config, 'priority_lists') or not hasattr(config, 'airport_data'):
+        app.logger.error('Missing required config attributes')
+        raise ValueError('Invalid configuration')
+        
     areas_data = {}
     for area in areas:
         area_priority = config.priority_lists.get(area, [])
@@ -37,60 +51,77 @@ def get_area_data(stations, pireps, areas):
                 'Sector': station[0]['Sector']
             }
         areas_data[area] = {
-           'stations': area_stations,
+            'stations': area_stations,
+            'pireps': area_pireps,
             'pirep_status': station_pirep_status,
-            'pireps': area_pireps
         }
     return areas_data
 
-# Route to display METAR and PIREP data for each area
 @app.route('/')
 def index():
-    stations = fetch_metar_data()
-    pireps = fetch_pirep_data()
-    areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
-    areas_data = get_area_data(stations, pireps, areas)
-    now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-    return render_template('index.html', areas_data=areas_data, zulu_time=zulu_time)
+    try:
+        stations = fetch_metar_data()
+        pireps = fetch_pirep_data()
+        areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
+        areas_data = get_area_data(stations, pireps, areas)
+        now = datetime.now(pytz.utc)
+        zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+        app.logger.info('Index page accessed successfully')
+        return render_template('index.html', areas_data=areas_data, zulu_time=zulu_time)
+    except Exception as e:
+        app.logger.error(f'Error in index route: {str(e)}')
+        return "An error occurred", 500
 
 @app.route('/fetch-updated-data/<page>')
 def fetch_updated_data(page):
-    stations = fetch_metar_data()
-    pireps = fetch_pirep_data()
-    areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
-    areas_data = get_area_data(stations, pireps, areas)
-    now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-    return {
-        'zulu_time': zulu_time,
-        'areas_data': areas_data
-    }
+    try:
+        stations = fetch_metar_data()
+        pireps = fetch_pirep_data()
+        areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
+        areas_data = get_area_data(stations, pireps, areas)
+        now = datetime.now(pytz.utc)
+        zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+        app.logger.info(f'Data updated successfully for page: {page}')
+        return {
+            'zulu_time': zulu_time,
+            'areas_data': areas_data
+        }
+    except Exception as e:
+        app.logger.error(f'Error updating data: {str(e)}')
+        return {"error": "Failed to fetch data"}, 500
 
-# Route to display data for a specific area
 @app.route('/area/<area_name>')
 def area(area_name):
-    stations = fetch_metar_data()
-    pireps = fetch_pirep_data()
-    if area_name not in ["NORTH", "SOUTH", "HIGH", "ATOP"]:
-        return "Area not found", 404
-    areas_data = get_area_data(stations, pireps, [area_name])
-    now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-    return render_template('area.html', area_name=area_name, stations=areas_data[area_name]['stations'], pireps=areas_data[area_name]['pireps'], zulu_time=zulu_time)
+    try:
+        if area_name not in ["NORTH", "SOUTH", "HIGH", "ATOP"]:
+            return "Area not found", 404
+        stations = fetch_metar_data()
+        pireps = fetch_pirep_data()
+        areas_data = get_area_data(stations, pireps, [area_name])
+        now = datetime.now(pytz.utc)
+        zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+        return render_template('area.html', area_name=area_name, stations=areas_data[area_name]['stations'], pireps=areas_data[area_name]['pireps'], zulu_time=zulu_time)
+    except Exception as e:
+        app.logger.error(f'Error in area route: {str(e)}')
+        return "An error occurred", 500
 
 @app.route('/area-block/<area_name>')
 def area_block(area_name):
-    if area_name not in ["NORTH", "SOUTH", "HIGH", "ATOP"]:
-        return "Area not found", 404
-    stations = fetch_metar_data()
-    pireps = fetch_pirep_data()
-    areas_data = get_area_data(stations, pireps, [area_name])
-    now = datetime.now(pytz.utc)
-    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-    return render_template('area_block.html', area_name=area_name, area_data=areas_data[area_name], zulu_time=zulu_time)
+    try:
+        if area_name not in ["NORTH", "SOUTH", "HIGH", "ATOP"]:
+            return "Area not found", 404
+        stations = fetch_metar_data()
+        pireps = fetch_pirep_data()
+        areas_data = get_area_data(stations, pireps, [area_name])
+        now = datetime.now(pytz.utc)
+        zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+        return render_template('area_block.html', area_name=area_name, area_data=areas_data[area_name], zulu_time=zulu_time)
+    except Exception as e:
+        app.logger.error(f'Error in area_block route: {str(e)}')
+        return "An error occurred", 500
 
 if __name__ == "__main__":
+    app.logger.info('Application startup')
     app.run()
 
 

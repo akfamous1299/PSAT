@@ -1,14 +1,20 @@
 from datetime import datetime
 from io import StringIO
+from functools import lru_cache
+from time import time
 
 import numpy as np
 import pandas as pd
 import requests
 from shapely import is_valid
 from shapely.geometry import Point, Polygon
+import json
+import pickle
 
 import config
+from metar_fetcher import cache_with_timeout
 
+CACHE_TIMEOUT = 60  # 1 minute for PIREP data
 
 def point_in_polygon(lat, lon, polygon):
     shapely_polygon = Polygon(polygon)
@@ -19,7 +25,7 @@ def find_polygons(lat, lon, alt):
     found_poly = []
 
     if lon >= 0:
-        lon = -180 - (180 - lon)
+        lon = -360+lon
     point = Point(lat, lon)
     
 
@@ -45,6 +51,8 @@ def find_polygons(lat, lon, alt):
             if found_poly == sector_number:
                 area = area_name
                 break
+            
+    print(found_poly)        
 
     return found_poly
 
@@ -77,6 +85,7 @@ def format_time(iso_time):
     dt = datetime.fromisoformat(iso_time[:-1])  # Remove 'Z' for fromisoformat
     return dt.strftime('%H:%M')  # Format to 'HH:MM'
 
+@cache_with_timeout(60)  # Cache for 1 minute
 def fetch_pirep_data():
     """
     Fetch PIREP data from the specified URL and filter by defined sectors.
@@ -86,8 +95,6 @@ def fetch_pirep_data():
     url = config.get_pirep_url()
     response = requests.get(url)
     response_pasy = requests.get(config.pasy_url)
-
-
 
     if response.status_code != 200 or response_pasy.status_code != 200:
         print("Failed to fetch PIREP data.")
