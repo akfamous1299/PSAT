@@ -205,17 +205,17 @@ setInterval(() => fetchUpdatedData(currentPage), UPDATE_INTERVAL);
 // Add error handling for event listeners
 window.addEventListener('load', () => {
     const logoElement = document.querySelector('.logo');
-    const easterEggButton = document.getElementById('denali-button');
+    const denaliButton = document.getElementById('denali-button');
     const closePopupButton = document.getElementById('close-popup');
 
     if (logoElement) {
         logoElement.addEventListener('click', () => {
-            easterEggButton?.click();
+            denaliButton?.click();
         });
     }
 
-    if (easterEggButton) {
-        easterEggButton.addEventListener('click', () => {
+    if (denaliButton) {
+        denaliButton.addEventListener('click', () => {
             const popup = document.getElementById('denali-popup');
             if (popup) popup.style.display = 'block';
         });
