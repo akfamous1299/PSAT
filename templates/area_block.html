@@ -1,145 +1,148 @@
 <!-- area_block.html -->
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ area_name }} Area Blocks</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ area_name }} Area Blocks</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
 </head>
+
 <body>
-    <header>
-      <h3 class="logo">PSAT</h3>
-      <button id="easter-egg-button" style="display:none;">Easter Egg</button>
-      <div class="zulu-time" id="time">{{ zulu_time }}</div>
-      <nav class="nav">
-        <ul>
-          <li><a href="/">OMIC</a></li>
-          <li>
-            <a href="#">North</a>
-            <ul class="subnav">
-              <li><a href="/area/NORTH">North Area</a></li>
-              <li><a href="/area-block/NORTH">North Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">South</a>
-            <ul class="subnav">
-              <li><a href="/area/SOUTH">South Area</a></li>
-              <li><a href="/area-block/SOUTH">South Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">High</a>
-            <ul class="subnav">
-              <li><a href="/area/HIGH">High Area</a></li>
-              <li><a href="/area-block/HIGH">High Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">ATOP</a>
-            <ul class="subnav">
-              <li><a href="/area/ATOP">ATOP Area</a></li>
-              <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <main class="container">
-      <h2>{{ area_name }} Area Blocks (PIREP Status)</h2>
-      <div class="area-blocks-container">
-        {% if area_name == 'NORTH' %}
-          <div class="split left">
-            <h3>{{area_name}} Area (Left)</h3>
-            <div class="block-container">
-              {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-                {% if pirep_status['Sector'] in [4, 15, 16] %}
-                  {% if pirep_status['Status'] == 'Within 45 mins' %}
-                    <div class="block green" title="{{ pirep_status['Status'] }}">
-                      <b>{{ nas_id }}</b>
-                  {% elif pirep_status['Status'] == 'Within 60 mins' %}
-                    <div class="block yellow" title="{{ pirep_status['Status'] }}">
-                      <b>{{ nas_id }}</b>
-                  {% else %}
-                    <div class="block red" title="{{ pirep_status['Status'] }}">
-                      <b>{{ nas_id }}</b>
-                  {% endif %}
-                </div>
-              {% endif %}
-            {% endfor %}
-          </div>
-        </div>
-        <div class="split right">
-          <h3>{{area_name}} Area (Right)</h3>
-          <div class="block-container">
-            {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-              {% if pirep_status['Sector'] in [3, 9, 13] %}
-                {% if pirep_status['Status'] == 'Within 45 mins' %}
-                  <div class="block green" title="{{ pirep_status['Status'] }}">
-                    <b>{{ nas_id }}</b>
-                {% elif pirep_status['Status'] == 'Within 60 mins' %}
-                  <div class="block yellow" title="{{ pirep_status['Status'] }}">
-                    <b>{{ nas_id }}</b>
-                {% else %}
-                  <div class="block red" title="{{ pirep_status['Status'] }}">
-                    <b>{{ nas_id }}</b>
-                {% endif %}
-              </div>
-            {% endif %}
-          {% endfor %}
-        </div>
-      </div>
-    {% elif area_name == 'SOUTH' %}
+  <header>
+    <h3 class="logo">PSAT</h3>
+    <button id="denali-button" style="display:none;">Easter Egg</button>
+    <div class="zulu-time" id="time">{{ zulu_time }}</div>
+    <nav class="nav">
+      <ul>
+        <li><a href="/">OMIC</a></li>
+        <li>
+          <a href="#">North</a>
+          <ul class="subnav">
+            <li><a href="/area/NORTH">North Area</a></li>
+            <li><a href="/area-block/NORTH">North Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">South</a>
+          <ul class="subnav">
+            <li><a href="/area/SOUTH">South Area</a></li>
+            <li><a href="/area-block/SOUTH">South Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">High</a>
+          <ul class="subnav">
+            <li><a href="/area/HIGH">High Area</a></li>
+            <li><a href="/area-block/HIGH">High Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">ATOP</a>
+          <ul class="subnav">
+            <li><a href="/area/ATOP">ATOP Area</a></li>
+            <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    <h2>{{ area_name }} Area Blocks (PIREP Status)</h2>
+    <div class="area-blocks-container">
+      {% if area_name == 'NORTH' %}
       <div class="split left">
         <h3>{{area_name}} Area (Left)</h3>
         <div class="block-container">
           {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-            {% if pirep_status['Sector'] in [5, 6] %}
-              {% if pirep_status['Status'] == 'Within 45 mins' %}
-                <div class="block green" title="{{ pirep_status['Status'] }}">
-                  <b>{{ nas_id }}</b>
-              {% elif pirep_status['Status'] == 'Within 60 mins' %}
-                <div class="block yellow" title="{{ pirep_status['Status'] }}">
-                  <b>{{ nas_id }}</b>
-              {% else %}
-                <div class="block red" title="{{ pirep_status['Status'] }}">
-                  <b>{{ nas_id }}</b>
-              {% endif %}
-            </div>
-          {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-    <div class="split right">
-      <h3>{{area_name}} Area (Right)</h3>
-      <div class="block-container">
-        {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
-          {% if pirep_status['Sector'] in [7, 8] %}
-            {% if pirep_status['Status'] == 'Within 45 mins' %}
-              <div class="block green" title="{{ pirep_status['Status'] }}">
-                <b>{{ nas_id }}</b>
+          {% if pirep_status['Sector'] in [4, 15, 16] %}
+          {% if pirep_status['Status'] == 'Within 45 mins' %}
+          <div class="block green" title="{{ pirep_status['Status'] }}">
+            <b>{{ nas_id }}</b>
             {% elif pirep_status['Status'] == 'Within 60 mins' %}
-              <div class="block yellow" title="{{ pirep_status['Status'] }}">
-                <b>{{ nas_id }}</b>
-            {% else %}
+            <div class="block yellow" title="{{ pirep_status['Status'] }}">
+              <b>{{ nas_id }}</b>
+              {% else %}
               <div class="block red" title="{{ pirep_status['Status'] }}">
                 <b>{{ nas_id }}</b>
-            {% endif %}
+                {% endif %}
+              </div>
+              {% endif %}
+              {% endfor %}
+            </div>
           </div>
-        {% endif %}
-      {% endfor %}
-    </div>
-  </div>
-{% endif %}
-</div>
-</div>
-<div id="easter-egg-popup" class="easter-egg-popup">
-  <p>How hard would it be to...</p>
-  <button id="close-popup">Close</button>
-</div>
-</main>
+          <div class="split right">
+            <h3>{{area_name}} Area (Right)</h3>
+            <div class="block-container">
+              {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+              {% if pirep_status['Sector'] in [3, 9, 13] %}
+              {% if pirep_status['Status'] == 'Within 45 mins' %}
+              <div class="block green" title="{{ pirep_status['Status'] }}">
+                <b>{{ nas_id }}</b>
+                {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                  <b>{{ nas_id }}</b>
+                  {% else %}
+                  <div class="block red" title="{{ pirep_status['Status'] }}">
+                    <b>{{ nas_id }}</b>
+                    {% endif %}
+                  </div>
+                  {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              {% elif area_name == 'SOUTH' %}
+              <div class="split left">
+                <h3>{{area_name}} Area (Left)</h3>
+                <div class="block-container">
+                  {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+                  {% if pirep_status['Sector'] in [5, 6] %}
+                  {% if pirep_status['Status'] == 'Within 45 mins' %}
+                  <div class="block green" title="{{ pirep_status['Status'] }}">
+                    <b>{{ nas_id }}</b>
+                    {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                    <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                      <b>{{ nas_id }}</b>
+                      {% else %}
+                      <div class="block red" title="{{ pirep_status['Status'] }}">
+                        <b>{{ nas_id }}</b>
+                        {% endif %}
+                      </div>
+                      {% endif %}
+                      {% endfor %}
+                    </div>
+                  </div>
+                  <div class="split right">
+                    <h3>{{area_name}} Area (Right)</h3>
+                    <div class="block-container">
+                      {% for nas_id, pirep_status in area_data['pirep_status'].items() %}
+                      {% if pirep_status['Sector'] in [7, 8] %}
+                      {% if pirep_status['Status'] == 'Within 45 mins' %}
+                      <div class="block green" title="{{ pirep_status['Status'] }}">
+                        <b>{{ nas_id }}</b>
+                        {% elif pirep_status['Status'] == 'Within 60 mins' %}
+                        <div class="block yellow" title="{{ pirep_status['Status'] }}">
+                          <b>{{ nas_id }}</b>
+                          {% else %}
+                          <div class="block red" title="{{ pirep_status['Status'] }}">
+                            <b>{{ nas_id }}</b>
+                            {% endif %}
+                          </div>
+                          {% endif %}
+                          {% endfor %}
+                        </div>
+                      </div>
+                      {% endif %}
+                    </div>
+                  </div>
+                  <div id="denali-popup" class="denali-popup">
+                    <p>How hard would it be to...</p>
+                    <button id="close-popup">Close</button>
+                  </div>
+  </main>
 
-<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
 </body>
+
 </html>

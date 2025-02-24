@@ -205,7 +205,7 @@ setInterval(() => fetchUpdatedData(currentPage), UPDATE_INTERVAL);
 // Add error handling for event listeners
 window.addEventListener('load', () => {
     const logoElement = document.querySelector('.logo');
-    const easterEggButton = document.getElementById('easter-egg-button');
+    const easterEggButton = document.getElementById('denali-button');
     const closePopupButton = document.getElementById('close-popup');
 
     if (logoElement) {
@@ -216,14 +216,14 @@ window.addEventListener('load', () => {
 
     if (easterEggButton) {
         easterEggButton.addEventListener('click', () => {
-            const popup = document.getElementById('easter-egg-popup');
+            const popup = document.getElementById('denali-popup');
             if (popup) popup.style.display = 'block';
         });
     }
 
     if (closePopupButton) {
         closePopupButton.addEventListener('click', () => {
-            const popup = document.getElementById('easter-egg-popup');
+            const popup = document.getElementById('denali-popup');
             if (popup) popup.style.display = 'none';
         });
     }

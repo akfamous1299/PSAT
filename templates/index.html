@@ -2,94 +2,94 @@
 <!DOCTYPE html>
 <html lang="en">
 
-  <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>PSAT</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
-    <!-- Other CSS files are imported within main.css, so no need to link them separately here -->
-  </head>
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>PSAT</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+  <!-- Other CSS files are imported within main.css, so no need to link them separately here -->
+</head>
 
-  <body>
-    <header>
-      <h3 class="logo">PSAT</h3>
-      <button id="easter-egg-button" style="display:none;">Easter Egg</button>
-      <div class="zulu-time" id="time">{{ zulu_time }}</div>
-      <nav class="nav">
-        <ul>
-          <li><a href="/">OMIC</a></li>
-          <li>
-            <a href="#">North</a>
-            <ul class="subnav">
-              <li><a href="/area/NORTH">North Area</a></li>
-              <li><a href="/area-block/NORTH">North Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">South</a>
-            <ul class="subnav">
-              <li><a href="/area/SOUTH">South Area</a></li>
-              <li><a href="/area-block/SOUTH">South Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">High</a>
-            <ul class="subnav">
-              <li><a href="/area/HIGH">High Area</a></li>
-              <li><a href="/area-block/HIGH">High Blocks</a></li>
-            </ul>
-          </li>
-          <li>
-            <a href="#">ATOP</a>
-            <ul class="subnav">
-              <li><a href="/area/ATOP">ATOP Area</a></li>
-              <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
-            </ul>
-          </li>
-        </ul>
-      </nav>
-    </header>
-    <main class="container">
-      <!-- Loop through each area and display the PIREP requirement status for each station -->
-      <div class="table-grid"> <!-- Added container for grid layout -->
-        {% for area, data in areas_data.items() %}
-        {% if area!= "HIGH" %}
-        <div class="table-wrapper {{ area | lower }}"> <!-- Added wrapper with dynamic class -->
-          <h2>{{ area }} Area</h2>
-          <table>
-            <thead>
-              <tr>
-                <th>NAS ID</th>
-                <th>Latest PIREP</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-            <tbody id="stations-{{ area }}">
-              {% for station, status in data['pirep_status'].items() %}
-              <tr>
-                <td>{{ station }}</td>
-                <td>
-                  {% if status['Latest PIREP'] %}
-                  {{ status['Latest PIREP']['Time'] }}
-                  {% else %}
-                  None
-                  {% endif %}
-                </td>
-                <td>{{ status['Status'] }}</td>
-              </tr>
-              {% endfor %}
-            </tbody>
-          </table>
-        </div>
-        {% endif %}
-        {% endfor %}
+<body>
+  <header>
+    <h3 class="logo">PSAT</h3>
+    <button id="denali-button" style="display:none;">Easter Egg</button>
+    <div class="zulu-time" id="time">{{ zulu_time }}</div>
+    <nav class="nav">
+      <ul>
+        <li><a href="/">OMIC</a></li>
+        <li>
+          <a href="#">North</a>
+          <ul class="subnav">
+            <li><a href="/area/NORTH">North Area</a></li>
+            <li><a href="/area-block/NORTH">North Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">South</a>
+          <ul class="subnav">
+            <li><a href="/area/SOUTH">South Area</a></li>
+            <li><a href="/area-block/SOUTH">South Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">High</a>
+          <ul class="subnav">
+            <li><a href="/area/HIGH">High Area</a></li>
+            <li><a href="/area-block/HIGH">High Blocks</a></li>
+          </ul>
+        </li>
+        <li>
+          <a href="#">ATOP</a>
+          <ul class="subnav">
+            <li><a href="/area/ATOP">ATOP Area</a></li>
+            <li><a href="/area-block/ATOP">ATOP Blocks</a></li>
+          </ul>
+        </li>
+      </ul>
+    </nav>
+  </header>
+  <main class="container">
+    <!-- Loop through each area and display the PIREP requirement status for each station -->
+    <div class="table-grid"> <!-- Added container for grid layout -->
+      {% for area, data in areas_data.items() %}
+      {% if area!= "HIGH" %}
+      <div class="table-wrapper {{ area | lower }}"> <!-- Added wrapper with dynamic class -->
+        <h2>{{ area }} Area</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>NAS ID</th>
+              <th>Latest PIREP</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="stations-{{ area }}">
+            {% for station, status in data['pirep_status'].items() %}
+            <tr>
+              <td>{{ station }}</td>
+              <td>
+                {% if status['Latest PIREP'] %}
+                {{ status['Latest PIREP']['Time'] }}
+                {% else %}
+                None
+                {% endif %}
+              </td>
+              <td>{{ status['Status'] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
       </div>
-      <div id="easter-egg-popup" class="easter-egg-popup">
-        <p>How hard would it be to...</p>
-        <button id="close-popup">Close</button>
-      </div>
-    </main>
-    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
-  </body>
+      {% endif %}
+      {% endfor %}
+    </div>
+    <div id="denali-popup" class="denali-popup">
+      <p>How hard would it be to...</p>
+      <button id="close-popup">Close</button>
+    </div>
+  </main>
+  <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
 
 </html>
