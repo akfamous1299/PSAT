@@ -5,12 +5,15 @@ import requests
 from io import StringIO
 from shapely import is_valid
 from shapely.geometry import Point, Polygon
-import json
-import pickle
 from functools import lru_cache
 from time import time
+import logging
+from cachetools import TTLCache, cached
 
 import config
+
+# Configure logging
+logging.basicConfig(level=logging.INFO)
 
 def find_polygons(lat, lon, alt):
     found_poly = []
@@ -55,7 +58,9 @@ def cache_with_timeout(timeout_seconds):
         return wrapper
     return decorator
 
-@cache_with_timeout(120)  # Cache for 2 minutes
+# Create a TTLCache with a max size of 128 and a TTL of 120 seconds (2 minutes)
+metar_cache = TTLCache(maxsize=128, ttl=120)
+@cached(metar_cache)
 def fetch_metar_data():
     url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=%40AK&hoursBeforeNow=2&format=csv&mostRecent=false&mostRecentForEachStation=postfilter"
     try:
@@ -94,14 +99,14 @@ def fetch_metar_data():
             return False
 
         filtered_stations = []
+
         for _, row in data.iterrows():
             visibility = row['visibility_statute_mi']
             lowest_ceiling = check_cloud_layers(row)
             weather_condition = check_weather_conditions(row)
             sector_number = find_polygons(row['latitude'], row['longitude'], 0)
-            
 
-            if pd.notna(visibility) and visibility <= 5 or lowest_ceiling or weather_condition:
+            if (pd.isna(visibility) or visibility <= 5) or lowest_ceiling or weather_condition:
                 filtered_stations.append({
                     'station_id': row['station_id'],
                     'visibility': visibility if pd.notna(visibility) else "N/A",
@@ -110,6 +115,22 @@ def fetch_metar_data():
                     'wx_string': row['wx_string'] if pd.notna(row['wx_string']) else "N/A",
                     'elevation': row['elevation'],
                     'sector': sector_number
+                })
+
+        # Add missing stations with all values as "N/A"
+        #logging.debug(f"Station IDs: {data['station_id'].values}")
+        for site in config.airport_data:
+            station_id = site['ICAO ID']
+            if station_id not in data['station_id'].values:
+                logging.info(f"Missing METAR data for station: {station_id}")
+                filtered_stations.append({
+                    'station_id': station_id,
+                    'visibility': "N/A",
+                    'ceiling_type': "N/A",
+                    'ceiling_altitude': "N/A",
+                    'wx_string': "N/A",
+                    'elevation': 0,
+                    'sector': site['Sector']
                 })
 
         return filtered_stations

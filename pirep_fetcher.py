@@ -8,13 +8,10 @@ import pandas as pd
 import requests
 from shapely import is_valid
 from shapely.geometry import Point, Polygon
-import json
-import pickle
+from cachetools import TTLCache, cached
 
 import config
 from metar_fetcher import cache_with_timeout
-
-CACHE_TIMEOUT = 60  # 1 minute for PIREP data
 
 def point_in_polygon(lat, lon, polygon):
     shapely_polygon = Polygon(polygon)
@@ -85,7 +82,10 @@ def format_time(iso_time):
     dt = datetime.fromisoformat(iso_time[:-1])  # Remove 'Z' for fromisoformat
     return dt.strftime('%H:%M')  # Format to 'HH:MM'
 
-@cache_with_timeout(60)  # Cache for 1 minute
+# Create a TTLCache with a max size of 128 and a TTL of 60 seconds (1 minute)
+pirep_cache = TTLCache(maxsize=128, ttl=60)
+
+@cached(pirep_cache)
 def fetch_pirep_data():
     """
     Fetch PIREP data from the specified URL and filter by defined sectors.

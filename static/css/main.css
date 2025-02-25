@@ -269,22 +269,24 @@ th {
 .table-grid {
   display: flex;
   flex-wrap: wrap;
-  gap: 20px;
+  column-gap: 2vw;
 }
 
+/* Check for CSS grid support */
 @supports (display: grid) {
   .table-grid {
     display: grid;
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    column-gap: 2vw;
     grid-auto-rows: minmax(100px, auto);
   }
 }
 
+/* Media query for responsive design */
 @media (min-width: 768px) {
   .table-grid {
     grid-template-columns: repeat(2, 1fr);
-    gap: 10px;
+    column-gap: 2vw;
     grid-auto-rows: minmax(100px, auto);
   }
 
