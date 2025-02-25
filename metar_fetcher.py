@@ -5,10 +5,8 @@ import requests
 from io import StringIO
 from shapely import is_valid
 from shapely.geometry import Point, Polygon
-from functools import lru_cache
 from time import time
 import logging
-from cachetools import TTLCache, cached
 
 import config
 
@@ -41,26 +39,6 @@ def find_polygons(lat, lon, alt):
 
     return found_poly
 
-def cache_with_timeout(timeout_seconds):
-    def decorator(func):
-        cache = {}
-        
-        def wrapper(*args, **kwargs):
-            now = time()
-            if func.__name__ in cache:
-                result, timestamp = cache[func.__name__]
-                if now - timestamp < timeout_seconds:
-                    return result
-            
-            result = func(*args, **kwargs)
-            cache[func.__name__] = (result, now)
-            return result
-        return wrapper
-    return decorator
-
-# Create a TTLCache with a max size of 128 and a TTL of 120 seconds (2 minutes)
-metar_cache = TTLCache(maxsize=128, ttl=120)
-@cached(metar_cache)
 def fetch_metar_data():
     url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=metars&stationString=%40AK&hoursBeforeNow=2&format=csv&mostRecent=false&mostRecentForEachStation=postfilter"
     try:
@@ -122,7 +100,7 @@ def fetch_metar_data():
         for site in config.airport_data:
             station_id = site['ICAO ID']
             if station_id not in data['station_id'].values:
-                logging.info(f"Missing METAR data for station: {station_id}")
+                #logging.info(f"Missing METAR data for station: {station_id}")
                 filtered_stations.append({
                     'station_id': station_id,
                     'visibility': "N/A",
