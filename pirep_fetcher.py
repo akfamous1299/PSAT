@@ -121,6 +121,8 @@ def fetch_pirep_data():
 
             sector_number = find_polygons(lat, lon, alt)
 
+            #print(f"PIREP", raw_text, "at", lat, lon, "in sector", sector_number)
+
             formatted_observation_time = format_time(row['observation_time'])
             for area_name, area_data in config.areas.items():
                 if sector_number in area_data["sectors"]:
