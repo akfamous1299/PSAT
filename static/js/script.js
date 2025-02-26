@@ -55,7 +55,7 @@ function updateBlockContainer(areaData, area) {
         console.error('Invalid area data');
         return;
     }
-    const blockContainer = document.querySelector('.area-blocks-container');
+    const blockContainer = document.querySelector('.block-container');
     blockContainer.innerHTML = '';
 
     // Create containers for split left and right
