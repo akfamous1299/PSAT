@@ -122,67 +122,110 @@ function showError(message) {
     setTimeout(() => errorDiv.remove(), 5000);
 }
 
-// Function to fetch updated data
-function fetchUpdatedData(page) {
-    if (!page) {
-        console.error('Invalid page parameter');
-        return;
-    }
-    // Add loading state
-    document.body.classList.add('loading');
+// Remove the old interval-based update code
+// Delete or comment out:
+// - fetchUpdatedData function
+// - setInterval call
+// - Initial fetchUpdatedData call
 
-    fetch(`/fetch-updated-data/${page}`)
-        .then(response => {
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
-            }
-            return response.json();
-        })
-        .then(data => {
-            updateZuluTime(data.zulu_time);
-            if (page === "index") {
-                // Update areas data
-                for (let area in data.areas_data) {
-                    if (area !== "HIGH") {
-                        let tbody = document.getElementById(`stations-${area}`);
-                        tbody.innerHTML = '';
-                        for (let stationID in data.areas_data[area].pirep_status) {
-                            let station = data.areas_data[area].pirep_status[stationID];
-                            let latestPirepTime = station?.['Latest PIREP']?.['Time'] ?? 'None';
-                            let row = `
-                                <tr>
-                                    <td>${stationID}</td>
-                                    <td>${latestPirepTime}</td>
-                                    <td>${station.Status}</td>
-                                </tr>
-                            `;
-                            tbody.innerHTML += row;
-                        }
-                    }
+// Modified SSE setup with reconnection logic
+function setupEventSource() {
+    let eventSource = null;
+
+    function connect() {
+        if (eventSource) {
+            eventSource.close();
+        }
+
+        eventSource = new EventSource('/stream');
+
+        eventSource.onmessage = function (event) {
+            try {
+                const data = JSON.parse(event.data);
+
+                if (data.reconnect) {
+                    console.log('Server requested reconnection');
+                    setTimeout(connect, 1000);
+                    return;
                 }
-            } else if (page.startsWith('area-block-')) {
-                let area = page.split('-')[2];
-                // Update block container
-                updateBlockContainer(data.areas_data[area].pirep_status, area);
-                //console.log("called for update with:", data.areas_data[area].pirep_status)
-            } else {
-                let area = page;
-                // Update METAR and PIREP tables
-                if (area !== "HIGH") {
-                    updateMetarTable(data.areas_data[area].stations);
+
+                if (data.error) {
+                    console.error('Server error:', data.error);
+                    showError('Server error occurred. Reconnecting...');
+                    return;
                 }
-                updatePirepTable(data.areas_data[area].pireps);
-                console.log("called for update with:", data.areas_data[area].pireps)
+
+                // Update UI with data
+                updateUI(data);
+            } catch (error) {
+                console.error('Error processing update:', error);
+                showError('Error processing update');
             }
-        })
-        .catch(error => {
-            console.error('Error:', error);
-            showError('Failed to fetch updated data. Please try again later.');
-        })
-        .finally(() => {
-            document.body.classList.remove('loading');
-        });
+        };
+
+        eventSource.onerror = function (error) {
+            console.error('EventSource failed:', error);
+            showError('Connection lost. Reconnecting...');
+            eventSource.close();
+            setTimeout(connect, 5000);
+        };
+    }
+
+    // Initial connection
+    connect();
+
+    // Cleanup on page unload
+    window.addEventListener('beforeunload', () => {
+        if (eventSource) {
+            eventSource.close();
+        }
+    });
 }
+
+// Separate UI update logic for better organization
+function updateUI(data) {
+    // Update the time regardless of page
+    updateZuluTime(data.zulu_time);
+
+    const currentPage = getCurrentPage();
+
+    if (currentPage === "index") {
+        updateIndexPage(data.areas_data);
+    } else if (currentPage.startsWith('area-block-')) {
+        updateBlockPage(data.areas_data, currentPage);
+    } else {
+        updateAreaPage(data.areas_data, currentPage);
+    }
+}
+
+function updateIndexPage(areasData) {
+    for (let area in areasData) {
+        if (area !== "HIGH") {
+            let tbody = document.getElementById(`stations-${area}`);
+            if (tbody) {
+                updateIndexTable(tbody, areasData[area].pirep_status);
+            }
+        }
+    }
+}
+
+function updateIndexTable(tbody, pirepStatus) {
+    const rows = Object.entries(pirepStatus).map(([stationID, station]) => {
+        const latestPirepTime = station?.['Latest PIREP']?.['Time'] ?? 'None';
+        return `
+            <tr>
+                <td>${stationID}</td>
+                <td>${latestPirepTime}</td>
+                <td>${station.Status}</td>
+            </tr>
+        `;
+    }).join('');
+
+    tbody.innerHTML = rows;
+}
+
+// Initialize the SSE connection when the page loads
+document.addEventListener('DOMContentLoaded', setupEventSource);
 
 // Function to get the current page
 function getCurrentPage() {
@@ -194,13 +237,6 @@ function getCurrentPage() {
     }
     return currentUrl === '/' ? 'index' : currentUrl.slice(1);
 }
-
-// Initial data fetch
-const currentPage = getCurrentPage();
-fetchUpdatedData(currentPage);
-
-// Update data every 30 seconds
-setInterval(() => fetchUpdatedData(currentPage), UPDATE_INTERVAL);
 
 // Add error handling for event listeners
 window.addEventListener('load', () => {

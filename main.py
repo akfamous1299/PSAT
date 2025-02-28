@@ -1,12 +1,15 @@
 #main.py
-from flask import Flask, render_template
+from flask import Flask, render_template, Response, stream_with_context
 import config  # Import the config file
 from metar_fetcher import fetch_metar_data
 from pirep_fetcher import fetch_pirep_data
-from datetime import datetime
+from datetime import datetime, timedelta
 import pytz
 import logging
 from logging.handlers import RotatingFileHandler
+import json
+import time
+from functools import lru_cache
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -56,6 +59,63 @@ def get_area_data(stations: list, pireps: list, areas: list) -> dict:
             'pirep_status': station_pirep_status,
         }
     return areas_data
+
+# Add cache for data fetching (5 second timeout)
+@lru_cache(maxsize=1)
+def fetch_cached_data():
+    stations = fetch_metar_data()
+    pireps = fetch_pirep_data()
+    return stations, pireps
+
+def clear_cache():
+    fetch_cached_data.cache_clear()
+
+# Add connection counter
+active_connections = 0
+
+@app.route('/stream')
+def stream():
+    def generate():
+        global active_connections
+        active_connections += 1
+        app.logger.info(f'New connection established. Active connections: {active_connections}')
+        
+        try:
+            while True:
+                try:
+                    now = datetime.now(pytz.utc)
+                    stations, pireps = fetch_cached_data()
+                    areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
+                    areas_data = get_area_data(stations, pireps, areas)
+                    zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
+                    
+                    data = {
+                        'zulu_time': zulu_time,
+                        'areas_data': areas_data
+                    }
+                    
+                    yield f"data: {json.dumps(data)}\n\n"
+                    clear_cache()  # Clear cache after use
+                    
+                    time.sleep(30)  # Wait 30 seconds before next update
+                    
+                except Exception as e:
+                    app.logger.error(f'Stream error: {str(e)}')
+                    yield f"data: {json.dumps({'error': str(e)})}\n\n"
+                    time.sleep(5)
+        finally:
+            # Cleanup when client disconnects
+            active_connections -= 1
+            app.logger.info(f'Connection closed. Active connections: {active_connections}')
+    
+    return Response(
+        stream_with_context(generate()),
+        mimetype='text/event-stream',
+        headers={
+            'Cache-Control': 'no-cache',
+            'X-Accel-Buffering': 'no'  # Disable nginx buffering
+        }
+    )
 
 @app.route('/')
 def index():
@@ -122,6 +182,6 @@ def area_block(area_name):
 
 if __name__ == "__main__":
     app.logger.info('Application startup')
-    app.run()
+    app.run(threaded=True)  # Enable threading for multiple connections
 
 
