@@ -90,23 +90,36 @@ def fetch_pirep_data():
         print("Failed to fetch PIREP data.")
         return []
 
-    # Read the CSV into a DataFrame, skip rows and handle headers appropriately
+    # Read the CSV into a DataFrame with more robust error handling
     try:
-        df = pd.read_csv(StringIO(response.text), skiprows=5, on_bad_lines='warn')
-        df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5, on_bad_lines='warn')
+        # Use error_bad_lines=False (renamed to on_bad_lines='skip' in newer versions)
+        df = pd.read_csv(StringIO(response.text), 
+                        skiprows=5, 
+                        on_bad_lines='skip',
+                        dtype=str)  # Read all columns as strings initially
+        
+        df_pasy = pd.read_csv(StringIO(response_pasy.text), 
+                             skiprows=5, 
+                             on_bad_lines='skip',
+                             dtype=str)  # Read all columns as strings initially
 
         if not df.empty and not df_pasy.empty:
-            df = pd.concat([df, df_pasy], ignore_index=True)
+            # Ensure both dataframes have the same columns before concatenating
+            common_columns = list(set(df.columns) & set(df_pasy.columns))
+            df = pd.concat([df[common_columns], df_pasy[common_columns]], ignore_index=True)
         elif df.empty:
             df = df_pasy
-        # If df_pasy is empty, df remains unchanged
+
+        # Replace null values with appropriate types for each column
+        df['latitude'] = pd.to_numeric(df['latitude'], errors='coerce').fillna(-1)
+        df['longitude'] = pd.to_numeric(df['longitude'], errors='coerce').fillna(-1)
+        df['altitude_ft_msl'] = pd.to_numeric(df['altitude_ft_msl'], errors='coerce').fillna(-1)
+        df = df.fillna('')  # Fill remaining string columns with empty string
 
     except ValueError as e:
         print(f"Failed to parse CSV: {e}")
         return []
 
-    df.fillna(-1, inplace=True)
-    
     pireps = []
 
     for _, row in df.iterrows():
