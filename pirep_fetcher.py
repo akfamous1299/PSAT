@@ -76,6 +76,36 @@ def format_time(iso_time):
     dt = datetime.fromisoformat(iso_time[:-1])  # Remove 'Z' for fromisoformat
     return dt.strftime('%H:%M')  # Format to 'HH:MM'
 
+def bad_line_handler(line):
+    """
+    Handle malformed CSV lines by attempting to extract useful data
+    Returns a properly formatted list or None if the line cannot be processed
+    """
+    if not line or len(line) < 3:  # Basic validation
+        return None
+        
+    try:
+        # Extract the minimum required fields
+        receipt_time = line[0]
+        observation_time = line[1]
+        aircraft_ref = line[8]
+        latitude = line[9]
+        longitude = line[10]
+        altitude = line[11]
+        raw_text = line[41]
+        
+        # Validate essential fields
+        if not all([receipt_time, observation_time, latitude, longitude]):
+            return None
+            
+        # Return the line with validated fields
+        return [receipt_time, observation_time, aircraft_ref, 
+                latitude, longitude, altitude, raw_text]
+        
+    except (IndexError, ValueError):
+        print(f"Could not process line: {line}")
+        return None
+
 def fetch_pirep_data():
     """
     Fetch PIREP data from the specified URL and filter by defined sectors.
@@ -92,9 +122,26 @@ def fetch_pirep_data():
 
     # Read the CSV into a DataFrame, skip rows and handle headers appropriately
     try:
-        df = pd.read_csv(StringIO(response.text), skiprows=5, on_bad_lines='skip')
-        #print(df)
-        df_pasy = pd.read_csv(StringIO(response_pasy.text), skiprows=5, on_bad_lines='skip')
+        # Specify the names of columns we actually need
+        cols = ['receipt_time', 'observation_time', 'aircraft_ref',
+                'latitude', 'longitude', 'altitude_ft_msl', 'raw_text',
+                'report_type']
+                
+        df = pd.read_csv(
+            StringIO(response.text),
+            skiprows=5,
+            usecols=cols,
+            on_bad_lines=bad_line_handler,
+            engine='python'
+        )
+        
+        df_pasy = pd.read_csv(
+            StringIO(response_pasy.text),
+            skiprows=5,
+            usecols=cols,
+            on_bad_lines=bad_line_handler,
+            engine='python'
+        )
 
         if not df.empty and not df_pasy.empty:
             df = pd.concat([df, df_pasy], ignore_index=True)
