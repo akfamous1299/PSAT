@@ -1101,7 +1101,7 @@ pirep_config = {
     "MinLon": -179,
     "MaxLon": -130,
     "hoursBeforeNow": 1.5,
-    "url_template": "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow={hours}&format=csv&boundingBox={minlat},{minlon},{maxlat},{maxlon}"
+    "url_template": "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow={hours}&format=xml&boundingBox={minlat},{minlon},{maxlat},{maxlon}"
 }
 def get_pirep_url():
     return pirep_config["url_template"].format(
@@ -1112,7 +1112,7 @@ def get_pirep_url():
         maxlon=pirep_config["MaxLon"]
     )
 
-pasy_url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow=1&format=csv&boundingBox=45%2C%20159%2C%2055%2C%20179"
+pasy_url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow=1&format=xml&boundingBox=45%2C%20159%2C%2055%2C%20179"
 
 areas = {
     "NORTH": {

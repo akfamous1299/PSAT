@@ -1,7 +1,7 @@
 from datetime import datetime
-from io import StringIO
+import xml.etree.ElementTree as ET
+import pytz
 
-import pandas as pd
 import requests
 from shapely.geometry import Point, Polygon
 
@@ -109,7 +109,7 @@ def bad_line_handler(line):
 def fetch_pirep_data():
     """
     Fetch PIREP data from the specified URL and filter by defined sectors.
-
+    
     :return: List of PIREPs with relevant information
     """
     url = config.get_pirep_url()
@@ -120,80 +120,71 @@ def fetch_pirep_data():
         print("Failed to fetch PIREP data.")
         return []
 
-    # Read the CSV into a DataFrame, skip rows and handle headers appropriately
     try:
-        # Specify the names of columns we actually need
-        cols = ['receipt_time', 'observation_time', 'aircraft_ref',
-                'latitude', 'longitude', 'altitude_ft_msl', 'raw_text',
-                'report_type']
-                
-        df = pd.read_csv(
-            StringIO(response.text),
-            skiprows=5,
-            usecols=cols,
-            on_bad_lines=bad_line_handler,
-            engine='python'
-        )
+        # Parse XML responses
+        root = ET.fromstring(response.text)
+        root_pasy = ET.fromstring(response_pasy.text)
         
-        df_pasy = pd.read_csv(
-            StringIO(response_pasy.text),
-            skiprows=5,
-            usecols=cols,
-            on_bad_lines=bad_line_handler,
-            engine='python'
-        )
+        # Combine PIREP data from both sources
+        pireps = []
+        for xml_root in [root, root_pasy]:
+            for pirep in xml_root.findall(".//AircraftReport"):
+                try:
+                    # Extract basic data from XML
+                    lat = float(pirep.find("latitude").text)
+                    lon = float(pirep.find("longitude").text)
+                    alt = int(float(pirep.find("altitude_ft_msl").text)) if pirep.find("altitude_ft_msl") is not None else 0
+                    raw_text = pirep.find("raw_text").text
+                    receipt_time = pirep.find("receipt_time").text
+                    observation_time = pirep.find("observation_time").text
+                    report_type = pirep.find("report_type").text if pirep.find("report_type") is not None else ""
+                    aircraft_ref = pirep.find("aircraft_ref").text if pirep.find("aircraft_ref") is not None else ""
 
-        if not df.empty and not df_pasy.empty:
-            df = pd.concat([df, df_pasy], ignore_index=True)
-        elif df.empty:
-            df = df_pasy
-        # If df_pasy is empty, df remains unchanged
+                    # Extract additional info
+                    apt = extract_apt(raw_text)
+                    rmk = extract_rmk(raw_text)
+                    loc = extract_loc(raw_text)
 
-    except ValueError as e:
-        print(f"Failed to parse CSV: {e}")
+                    # Find sector
+                    sector_number = find_polygons(lat, lon, alt)
+
+                    if sector_number:
+                        # Convert observation time to formatted time
+                        dt = datetime.strptime(observation_time, "%Y-%m-%dT%H:%M:%SZ")
+                        formatted_time = dt.strftime('%H:%M')
+
+                        # Find corresponding area
+                        area_name = None
+                        for area, area_data in config.areas.items():
+                            if sector_number in area_data["sectors"]:
+                                area_name = area
+                                break
+
+                        if area_name:
+                            pireps.append({
+                                "Location": loc,
+                                "Receipt Time": receipt_time,
+                                "RPT_TIME": observation_time,
+                                "Time": formatted_time,
+                                "Type": report_type,
+                                "ACFT": aircraft_ref,
+                                "ALT": alt,
+                                "PIREP Remarks": rmk,
+                                "PIREP Text": raw_text,
+                                "Area": area_name,
+                                "APT": apt,
+                                "Sector": sector_number
+                            })
+
+                except (ValueError, AttributeError) as e:
+                    print(f"Error processing PIREP: {e}")
+                    continue
+
+        return pireps
+
+    except ET.ParseError as e:
+        print(f"Failed to parse XML: {e}")
         return []
-
-    df.fillna(-1, inplace=True)
-    
-    pireps = []
-
-    for _, row in df.iterrows():
-        try:
-            lat = float(row['latitude'])
-            lon = float(row['longitude'])
-            alt = int(row['altitude_ft_msl'])
-            raw_text = row['raw_text']
-            apt = extract_apt(raw_text)  # Extract the APT
-            rmk = extract_rmk(raw_text)# Extract the RMK
-            loc = extract_loc(raw_text)  # Extract the LOC
-
-            sector_number = find_polygons(lat, lon, alt)
-
-            #print(f"PIREP", raw_text, "at", lat, lon, "in sector", sector_number)
-
-            formatted_observation_time = format_time(row['observation_time'])
-            for area_name, area_data in config.areas.items():
-                if sector_number in area_data["sectors"]:
-
-                    pireps.append({
-                            "Location": loc,
-                            "Receipt Time": row['receipt_time'],
-                            "RPT_TIME": row["observation_time"],
-                            "Time": formatted_observation_time,
-                            "Type": row['report_type'],
-                            "ACFT": row['aircraft_ref'],
-                            "ALT": alt,
-                            "PIREP Remarks": rmk,
-                            "PIREP Text": row['raw_text'],
-                            "Area": area_name,
-                            "APT": apt, 
-                            "Sector": sector_number
-                        })
-                    break
-
-        except ValueError as ve:
-            print(f"Could not convert string to float: {ve}, row: {row}")  # Debugging
-        except Exception as e:
-            print(f"Unexpected error processing row: {e}")  # Debugging
-    #print(pireps)
-    return pireps
+    except Exception as e:
+        print(f"Unexpected error: {e}")
+        return []
