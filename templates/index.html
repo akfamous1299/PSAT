@@ -75,7 +75,15 @@
                 None
                 {% endif %}
               </td>
-              <td>{{ status['Status'] }}</td>
+              <td class="
+                {%- if status['Status'] == 'Within 45 mins' -%}
+                  status-green
+                {%- elif status['Status'] == 'Within 60 mins' -%}
+                  status-yellow
+                {%- else -%}
+                  status-red
+                {%- endif -%}
+              ">{{ status['Status'] }}</td>
             </tr>
             {% endfor %}
           </tbody>

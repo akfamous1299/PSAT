@@ -182,46 +182,116 @@ function setupEventSource() {
     });
 }
 
+// Add these new functions before the updateUI function
+function updateBlockPage(areasData, currentPage) {
+    try {
+        const area = currentPage.split('-')[2];
+        if (areasData[area] && areasData[area].pirep_status) {
+            console.log(`Updating blocks for ${area}:`, areasData[area].pirep_status);
+            updateBlockContainer(areasData[area].pirep_status, area);
+        } else {
+            console.error(`No data found for area: ${area}`);
+        }
+    } catch (error) {
+        console.error('Error in updateBlockPage:', error);
+    }
+}
+
+function updateAreaPage(areasData, currentPage) {
+    try {
+        if (areasData[currentPage]) {
+            if (currentPage !== "HIGH") {
+                updateMetarTable(areasData[currentPage].stations);
+            }
+            if (areasData[currentPage].pireps) {
+                updatePirepTable(areasData[currentPage].pireps);
+            }
+        } else {
+            console.error(`No data found for area: ${currentPage}`);
+        }
+    } catch (error) {
+        console.error('Error in updateAreaPage:', error);
+    }
+}
+
 // Separate UI update logic for better organization
 function updateUI(data) {
+    console.log('Received data:', data); // Debug log
+
     // Update the time regardless of page
     updateZuluTime(data.zulu_time);
 
     const currentPage = getCurrentPage();
+    console.log('Current page:', currentPage); // Debug log
 
-    if (currentPage === "index") {
-        updateIndexPage(data.areas_data);
-    } else if (currentPage.startsWith('area-block-')) {
-        updateBlockPage(data.areas_data, currentPage);
-    } else {
-        updateAreaPage(data.areas_data, currentPage);
+    try {
+        if (currentPage === "index") {
+            updateIndexPage(data.areas_data);
+        } else if (currentPage.startsWith('area-block-')) {
+            updateBlockPage(data.areas_data, currentPage);
+        } else if (currentPage.startsWith('area/')) {
+            // Fix for area pages
+            const areaName = currentPage.split('/')[1];
+            updateAreaPage(data.areas_data, areaName);
+        } else {
+            // Direct area pages
+            updateAreaPage(data.areas_data, currentPage);
+        }
+    } catch (error) {
+        console.error('Error in updateUI:', error);
+        showError('Error updating page content');
     }
 }
 
 function updateIndexPage(areasData) {
+    if (!areasData) {
+        console.error('No areas data received');
+        return;
+    }
+
     for (let area in areasData) {
         if (area !== "HIGH") {
             let tbody = document.getElementById(`stations-${area}`);
             if (tbody) {
-                updateIndexTable(tbody, areasData[area].pirep_status);
+                let pireps = areasData[area].pirep_status;
+                if (pireps) {
+                    try {
+                        const rows = Object.entries(pireps)
+                            .map(([stationID, station]) => {
+                                // Handle both possible PIREP time formats
+                                const latestPirep = station['Latest PIREP'];
+                                const pirepTime = latestPirep ?
+                                    (latestPirep.Time || latestPirep['Time']) : 'None';
+
+                                return `
+                                    <tr>
+                                        <td>${stationID}</td>
+                                        <td>${pirepTime}</td>
+                                        <td class="${getStatusClass(station.Status)}">${station.Status}</td>
+                                    </tr>
+                                `;
+                            })
+                            .join('');
+                        tbody.innerHTML = rows;
+                    } catch (error) {
+                        console.error(`Error updating ${area} table:`, error);
+                    }
+                }
             }
         }
     }
 }
 
-function updateIndexTable(tbody, pirepStatus) {
-    const rows = Object.entries(pirepStatus).map(([stationID, station]) => {
-        const latestPirepTime = station?.['Latest PIREP']?.['Time'] ?? 'None';
-        return `
-            <tr>
-                <td>${stationID}</td>
-                <td>${latestPirepTime}</td>
-                <td>${station.Status}</td>
-            </tr>
-        `;
-    }).join('');
-
-    tbody.innerHTML = rows;
+// Add this helper function for status styling
+function getStatusClass(status) {
+    switch (status) {
+        case 'Within 45 mins':
+            return 'status-green';
+        case 'Within 60 mins':
+            return 'status-yellow';
+        default:
+            return 'status-red';
+    }
 }
 
 // Initialize the SSE connection when the page loads
@@ -230,12 +300,17 @@ document.addEventListener('DOMContentLoaded', setupEventSource);
 // Function to get the current page
 function getCurrentPage() {
     const currentUrl = window.location.pathname;
-    if (currentUrl.startsWith('/area/')) {
-        return currentUrl.split('/').pop();
-    } else if (currentUrl.startsWith('/area-block/')) {
-        return 'area-block-' + currentUrl.split('/').pop();
+    // Remove trailing slash if present
+    const cleanUrl = currentUrl.endsWith('/') ? currentUrl.slice(0, -1) : currentUrl;
+
+    if (cleanUrl === '' || cleanUrl === '/') {
+        return 'index';
+    } else if (cleanUrl.startsWith('/area/')) {
+        return cleanUrl.slice(1); // Include 'area/' in the return
+    } else if (cleanUrl.startsWith('/area-block/')) {
+        return 'area-block-' + cleanUrl.split('/').pop();
     }
-    return currentUrl === '/' ? 'index' : currentUrl.slice(1);
+    return cleanUrl.slice(1);
 }
 
 // Add error handling for event listeners

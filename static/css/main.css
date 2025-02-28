@@ -265,6 +265,22 @@ th {
   font-size: 14px;
 }
 
+/* Add these status color classes */
+.status-green {
+  color: var(--block-green);
+  font-weight: bold;
+}
+
+.status-yellow {
+  color: var(--block-yellow);
+  font-weight: bold;
+}
+
+.status-red {
+  color: var(--block-red);
+  font-weight: bold;
+}
+
 /* Grid Styles */
 .table-grid {
   display: flex;
