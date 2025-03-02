@@ -171,8 +171,7 @@ def index():
 @app.route('/fetch-updated-data/<page>')
 def fetch_updated_data(page):
     try:
-        stations = fetch_metar_data()
-        pireps = fetch_pirep_data()
+        stations, pireps = fetch_cached_data()
         areas = ["NORTH", "SOUTH", "HIGH", "ATOP"]
         areas_data = get_area_data(stations, pireps, areas)
         now = datetime.now(pytz.utc)

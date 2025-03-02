@@ -55,6 +55,7 @@ function updateBlockContainer(areaData, area) {
         console.error('Invalid area data');
         return;
     }
+    console.log('Updating block container via SSE');  // Debug log to confirm SSE updates
     const blockContainer = document.querySelector('.block-container');
     blockContainer.innerHTML = '';
 
@@ -137,9 +138,11 @@ function setupEventSource() {
             eventSource.close();
         }
 
+        console.log('Setting up EventSource connection...');  // Debug log
         eventSource = new EventSource('/stream');
 
         eventSource.onmessage = function (event) {
+            console.log('Received SSE message');  // Debug log
             try {
                 const data = JSON.parse(event.data);
 
@@ -297,20 +300,28 @@ function getStatusClass(status) {
 // Initialize the SSE connection when the page loads
 document.addEventListener('DOMContentLoaded', setupEventSource);
 
-// Function to get the current page
+// Add debug logging to the getCurrentPage function
 function getCurrentPage() {
     const currentUrl = window.location.pathname;
+    console.log('Current URL:', currentUrl);  // Debug log
+
     // Remove trailing slash if present
     const cleanUrl = currentUrl.endsWith('/') ? currentUrl.slice(0, -1) : currentUrl;
 
+    let page;
     if (cleanUrl === '' || cleanUrl === '/') {
-        return 'index';
+        page = 'index';
     } else if (cleanUrl.startsWith('/area/')) {
-        return cleanUrl.slice(1); // Include 'area/' in the return
+        page = cleanUrl.slice(1); // Include 'area/' in the return
     } else if (cleanUrl.startsWith('/area-block/')) {
-        return 'area-block-' + cleanUrl.split('/').pop();
+        page = 'area-block-' + cleanUrl.split('/').pop();
+        console.log('Area block page detected:', page);  // Debug log
+    } else {
+        page = cleanUrl.slice(1);
     }
-    return cleanUrl.slice(1);
+
+    console.log('Resolved page:', page);  // Debug log
+    return page;
 }
 
 // Add error handling for event listeners
