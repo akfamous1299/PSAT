@@ -1,5 +1,5 @@
 // Constants
-const UPDATE_INTERVAL = 30000; // 30 seconds
+const UPDATE_INTERVAL = 5000; // 5 seconds
 const CURRENT_PAGE_ELEMENT = 'time';
 
 // Function to update the zulu time
