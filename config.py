@@ -24,13 +24,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
+    '''{
         'City': 'NONDALTON',
         'ICAO ID': 'PANO',
         'NAS ID': '5NN',
         'Area': 'SOUTH',
         'Sector': 5
-    },
+    }, '''
     {
         'City': 'ALLAKAKET',
         'ICAO ID': 'PFAL',
@@ -45,13 +45,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 9
     },
-    {
+    '''{
         'City': 'TATITLEK',
         'ICAO ID': 'PAKA',
         'NAS ID': '7KA',
         'Area': 'SOUTH',
         'Sector': 7
-    },
+    },'''
     {
         'City': 'CHUATHBALUK',
         'ICAO ID': 'PACH',
@@ -94,13 +94,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
+    '''{
         'City': 'ATKA',
         'ICAO ID': 'PAAK',
         'NAS ID': 'AKA',
         'Area': 'ATOP',
         'Sector': 11
-    },
+    },'''
     {
         'City': 'AKIAK',
         'ICAO ID': 'PFAK',
@@ -136,13 +136,13 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 8
     },
-    {
+    '''{
         'City': 'TED STEVENS ANCHORAGE INTL',
         'ICAO ID': 'PANC',
         'NAS ID': 'ANC',
         'Area': 'SOUTH',
         'Sector': 6
-    },
+    },'''
     {
         'City': 'ANIAK',
         'ICAO ID': 'PANI',
@@ -199,13 +199,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 13
     },
-    {
+    '''{
         'City': 'BIG LAKE',
         'ICAO ID': 'PAGQ',
         'NAS ID': 'BGQ',
         'Area': 'SOUTH',
         'Sector': 6
-    },
+    },'''
     {
         'City': 'ALLEN AAF',
         'ICAO ID': 'PABI',
@@ -332,13 +332,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 16
     },
-    {
+    '''{
         'City': 'ELMENDORF AFB',
         'ICAO ID': 'PAED',
         'NAS ID': 'EDF',
         'Area': 'SOUTH',
         'Sector': 6
-    },
+    },'''
     {
         'City': 'EEK',
         'ICAO ID': 'PAEE',
@@ -535,13 +535,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
+    '''{
         'City': 'WASILLA',
         'ICAO ID': 'PAWS',
         'NAS ID': 'IYS',
         'Area': 'SOUTH',
         'Sector': 6
-    },
+    },'''
     {
         'City': 'JUNEAU INTL',
         'ICAO ID': 'PAJN',
@@ -1038,13 +1038,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
+    '''{
         'City': 'WHITTIER',
         'ICAO ID': 'PAWR',
         'NAS ID': 'WTR',
         'Area': 'SOUTH',
         'Sector': 6
-    },
+    },'''
     {
         'City': 'SELAWIK',
         'ICAO ID': 'PASK',
