@@ -9,7 +9,6 @@ import logging
 from logging.handlers import RotatingFileHandler
 import json
 import time
-from functools import lru_cache
 from cache_utils import FileCache
 import threading
 
