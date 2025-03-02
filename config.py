@@ -10,20 +10,21 @@ priority_lists = {
     "ATOP": ["ADK", "SYA"],
     "HIGH": []  # Replace with real station codes
 }
-airport_data = [{
-        'City': 'KOTLIK',
-        'ICAO ID': 'PFKO',
-        'NAS ID': '2A9',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'SHAKTOOLIK',
-        'ICAO ID': 'PFSH',
-        'NAS ID': '2C7',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+airport_data = [
+#    {
+#        'City': 'KOTLIK',
+#        'ICAO ID': 'PFKO',
+#        'NAS ID': '2A9',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'SHAKTOOLIK',
+#        'ICAO ID': 'PFSH',
+#        'NAS ID': '2C7',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
 #    {
 #        'City': 'NONDALTON',
 #        'ICAO ID': 'PANO',
@@ -31,20 +32,20 @@ airport_data = [{
 #        'Area': 'SOUTH',
 #        'Sector': 5
 #   },
-    {
-        'City': 'ALLAKAKET',
-        'ICAO ID': 'PFAL',
-        'NAS ID': '6A8',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'AKUTAN',
-        'ICAO ID': 'PAUT',
-        'NAS ID': '7AK',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'ALLAKAKET',
+#        'ICAO ID': 'PFAL',
+#        'NAS ID': '6A8',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'AKUTAN',
+#        'ICAO ID': 'PAUT',
+#        'NAS ID': '7AK',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
 #    {
 #        'City': 'TATITLEK',
 #        'ICAO ID': 'PAKA',
@@ -52,13 +53,13 @@ airport_data = [{
 #        'Area': 'SOUTH',
 #        'Sector': 7
 #    },
-    {
-        'City': 'CHUATHBALUK',
-        'ICAO ID': 'PACH',
-        'NAS ID': '9A3',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'CHUATHBALUK',
+#        'ICAO ID': 'PACH',
+#        'NAS ID': '9A3',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'ADAK',
         'ICAO ID': 'PADK',
@@ -87,13 +88,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
-        'City': 'BADAMI',
-        'ICAO ID': 'PABP',
-        'NAS ID': 'AK78',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'BADAMI',
+#        'ICAO ID': 'PABP',
+#        'NAS ID': 'AK78',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
 #    {
 #        'City': 'ATKA',
 #        'ICAO ID': 'PAAK',
@@ -101,20 +102,20 @@ airport_data = [{
 #        'Area': 'ATOP',
 #        'Sector': 11
 #    },
-    {
-        'City': 'AKIAK',
-        'ICAO ID': 'PFAK',
-        'NAS ID': 'AKI',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'AKHIOK',
-        'ICAO ID': 'PAKH',
-        'NAS ID': 'AKK',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'AKIAK',
+#        'ICAO ID': 'PFAK',
+#        'NAS ID': 'AKI',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'AKHIOK',
+#        'ICAO ID': 'PAKH',
+#        'NAS ID': 'AKK',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'KING SALMON',
         'ICAO ID': 'PAKN',
@@ -150,13 +151,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 13
     },
-    {
-        'City': 'ANVIK',
-        'ICAO ID': 'PANV',
-        'NAS ID': 'ANV',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'ANVIK',
+#        'ICAO ID': 'PANV',
+#        'NAS ID': 'ANV',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'QUINHAGAK',
         'ICAO ID': 'PAQH',
@@ -171,13 +172,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
-        'City': 'ARCTIC VILLAGE',
-        'ICAO ID': 'PARC',
-        'NAS ID': 'ARC',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'ARCTIC VILLAGE',
+#        'ICAO ID': 'PARC',
+#        'NAS ID': 'ARC',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'ATQASUK EDWARD BURNELL SR MEML',
         'ICAO ID': 'PATQ',
@@ -206,13 +207,13 @@ airport_data = [{
 #        'Area': 'SOUTH',
 #        'Sector': 6
 #    },
-    {
-        'City': 'ALLEN AAF',
-        'ICAO ID': 'PABI',
-        'NAS ID': 'BIG',
-        'Area': 'NORTH',
-        'Sector': 16
-    },
+#    {
+#        'City': 'ALLEN AAF',
+#        'ICAO ID': 'PABI',
+#        'NAS ID': 'BIG',
+#        'Area': 'NORTH',
+#        'Sector': 16
+#    },
     {
         'City': 'WILEY POST-WILL ROGERS MEML',
         'ICAO ID': 'PABR',
@@ -220,13 +221,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
-        'City': 'BARTER ISLAND',
-        'ICAO ID': 'PABA',
-        'NAS ID': 'BTI',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'BARTER ISLAND',
+#        'ICAO ID': 'PABA',
+#        'NAS ID': 'BTI',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'BETTLES',
         'ICAO ID': 'PABT',
@@ -255,41 +256,41 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 7
     },
-    {
-        'City': 'CENTRAL',
-        'ICAO ID': 'PACE',
-        'NAS ID': 'CEM',
-        'Area': 'NORTH',
-        'Sector': 16
-    },
-    {
-        'City': 'CHALKYITSIK',
-        'ICAO ID': 'PACI',
-        'NAS ID': 'CIK',
-        'Area': 'NORTH',
-        'Sector': 16
-    },
-    {
-        'City': 'CROOKED CREEK',
-        'ICAO ID': 'PACJ',
-        'NAS ID': 'CJX',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'CLARKS POINT',
-        'ICAO ID': 'PFCL',
-        'NAS ID': 'CLP',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
-    {
-        'City': 'COLDFOOT',
-        'ICAO ID': 'PACX',
-        'NAS ID': 'CXF',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'CENTRAL',
+#        'ICAO ID': 'PACE',
+#        'NAS ID': 'CEM',
+#        'Area': 'NORTH',
+#        'Sector': 16
+#    },
+#    {
+#        'City': 'CHALKYITSIK',
+#        'ICAO ID': 'PACI',
+#        'NAS ID': 'CIK',
+#        'Area': 'NORTH',
+#        'Sector': 16
+#    },
+#    {
+#        'City': 'CROOKED CREEK',
+#        'ICAO ID': 'PACJ',
+#        'NAS ID': 'CJX',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'CLARKS POINT',
+#        'ICAO ID': 'PFCL',
+#        'NAS ID': 'CLP',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
+#    {
+#        'City': 'COLDFOOT',
+#        'ICAO ID': 'PACX',
+#        'NAS ID': 'CXF',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'CAPE ROMANZOF LRRS',
         'ICAO ID': 'PACZ',
@@ -297,20 +298,20 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'ROBERT/BOB/CURTIS MEML',
-        'ICAO ID': 'PFNO',
-        'NAS ID': 'D76',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'DEERING',
-        'ICAO ID': 'PADE',
-        'NAS ID': 'DEE',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'ROBERT/BOB/CURTIS MEML',
+#        'ICAO ID': 'PFNO',
+#        'NAS ID': 'D76',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'DEERING',
+#        'ICAO ID': 'PADE',
+#        'NAS ID': 'DEE',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'DILLINGHAM',
         'ICAO ID': 'PADL',
@@ -325,13 +326,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 9
     },
-    {
-        'City': 'EAGLE',
-        'ICAO ID': 'PAEG',
-        'NAS ID': 'EAA',
-        'Area': 'NORTH',
-        'Sector': 16
-    },
+#    {
+#        'City': 'EAGLE',
+#        'ICAO ID': 'PAEG',
+#        'NAS ID': 'EAA',
+#        'Area': 'NORTH',
+#        'Sector': 16
+#    },
 #    {
 #        'City': 'ELMENDORF AFB',
 #        'ICAO ID': 'PAED',
@@ -339,34 +340,34 @@ airport_data = [{
 #        'Area': 'SOUTH',
 #        'Sector': 6
 #    },
-    {
-        'City': 'EEK',
-        'ICAO ID': 'PAEE',
-        'NAS ID': 'EEK',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'CAPE NEWENHAM LRRS',
-        'ICAO ID': 'PAEH',
-        'NAS ID': 'EHM',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
-    {
-        'City': 'EGEGIK',
-        'ICAO ID': 'PAII',
-        'NAS ID': 'EII',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
-    {
-        'City': 'EIELSON AFB',
-        'ICAO ID': 'PAEI',
-        'NAS ID': 'EIL',
-        'Area': 'NORTH',
-        'Sector': 16
-    },
+#    {
+#        'City': 'EEK',
+#        'ICAO ID': 'PAEE',
+#        'NAS ID': 'EEK',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'CAPE NEWENHAM LRRS',
+#        'ICAO ID': 'PAEH',
+#        'NAS ID': 'EHM',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
+#    {
+#        'City': 'EGEGIK',
+#        'ICAO ID': 'PAII',
+#        'NAS ID': 'EII',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
+#    {
+#        'City': 'EIELSON AFB',
+#        'ICAO ID': 'PAEI',
+#        'NAS ID': 'EIL',
+#        'Area': 'NORTH',
+#        'Sector': 16
+#    },
     {
         'City': 'KENAI MUNI',
         'ICAO ID': 'PAEN',
@@ -381,34 +382,34 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'NENANA MUNI',
-        'ICAO ID': 'PANN',
-        'NAS ID': 'ENN',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'FAIRBANKS INTL',
-        'ICAO ID': 'PAFA',
-        'NAS ID': 'FAI',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'LADD AAF',
-        'ICAO ID': 'PAFB',
-        'NAS ID': 'FBK',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'NIKOLAI',
-        'ICAO ID': 'PAFS',
-        'NAS ID': 'FSP',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'NENANA MUNI',
+#        'ICAO ID': 'PANN',
+#        'NAS ID': 'ENN',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+#        'City': 'FAIRBANKS INTL',
+#        'ICAO ID': 'PAFA',
+#        'NAS ID': 'FAI',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+##        'City': 'LADD AAF',
+#        'ICAO ID': 'PAFB',
+#        'NAS ID': 'FBK',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'NIKOLAI',
+#        'ICAO ID': 'PAFS',
+#        'NAS ID': 'FSP',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'FORT YUKON',
         'ICAO ID': 'PFYU',
@@ -437,13 +438,13 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 7
     },
-    {
-        'City': 'GOLOVIN',
-        'ICAO ID': 'PAGL',
-        'NAS ID': 'GLV',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'GOLOVIN',
+#        'ICAO ID': 'PAGL',
+#        'NAS ID': 'GLV',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'GUSTAVUS',
         'ICAO ID': 'PAGS',
@@ -451,13 +452,13 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 8
     },
-    {
-        'City': 'HOLY CROSS',
-        'ICAO ID': 'PAHC',
-        'NAS ID': 'HCA',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'HOLY CROSS',
+#        'ICAO ID': 'PAHC',
+#        'NAS ID': 'HCA',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'HUSLIA',
         'ICAO ID': 'PAHL',
@@ -486,34 +487,34 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'HEALY RIVER',
-        'ICAO ID': 'PAHV',
-        'NAS ID': 'HRR',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'HUGHES',
-        'ICAO ID': 'PAHU',
-        'NAS ID': 'HUS',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'BOB BAKER MEML',
-        'ICAO ID': 'PAIK',
-        'NAS ID': 'IAN',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'IGIUGIG',
-        'ICAO ID': 'PAIG',
-        'NAS ID': 'IGG',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'HEALY RIVER',
+#        'ICAO ID': 'PAHV',
+#        'NAS ID': 'HRR',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+#        'City': 'HUGHES',
+#        'ICAO ID': 'PAHU',
+#        'NAS ID': 'HUS',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'BOB BAKER MEML',
+#        'ICAO ID': 'PAIK',
+#        'NAS ID': 'IAN',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'IGIUGIG',
+#        'ICAO ID': 'PAIG',
+#        'NAS ID': 'IGG',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'KIPNUK',
         'ICAO ID': 'PAKI',
@@ -528,13 +529,13 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 5
     },
-    {
-        'City': 'WALES',
-        'ICAO ID': 'PAIW',
-        'NAS ID': 'IWK',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'WALES',
+#        'ICAO ID': 'PAIW',
+#        'NAS ID': 'IWK',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
 #    {
 #        'City': 'WASILLA',
 #        'ICAO ID': 'PAWS',
@@ -556,34 +557,34 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 9
     },
-    {
-        'City': 'KALTAG',
-        'ICAO ID': 'PAKV',
-        'NAS ID': 'KAL',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'GRAYLING',
-        'ICAO ID': 'PAGX',
-        'NAS ID': 'KGX',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'KOYUK ALFRED ADAMS',
-        'ICAO ID': 'PAKK',
-        'NAS ID': 'KKA',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'KALSKAG',
-        'ICAO ID': 'PALG',
-        'NAS ID': 'KLG',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'KALTAG',
+#        'ICAO ID': 'PAKV',
+#        'NAS ID': 'KAL',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'GRAYLING',
+#        'ICAO ID': 'PAGX',
+#        'NAS ID': 'KGX',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'KOYUK ALFRED ADAMS',
+#        'ICAO ID': 'PAKK',
+#        'NAS ID': 'KKA',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'KALSKAG',
+#        'ICAO ID': 'PALG',
+#        'NAS ID': 'KLG',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'NEW STUYAHOK',
         'ICAO ID': 'PANW',
@@ -612,48 +613,48 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'KING COVE',
-        'ICAO ID': 'PAVC',
-        'NAS ID': 'KVC',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
-    {
-        'City': 'KIVALINA',
-        'ICAO ID': 'PAVL',
-        'NAS ID': 'KVL',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'KWETHLUK',
-        'ICAO ID': 'PFKW',
-        'NAS ID': 'KWT',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'KOYUKUK',
-        'ICAO ID': 'PFKU',
-        'NAS ID': 'KYU',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'CAPE LISBURNE LRRS',
-        'ICAO ID': 'PALU',
-        'NAS ID': 'LUR',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'MANOKOTAK',
-        'ICAO ID': 'PAMB',
-        'NAS ID': 'MBA',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'KING COVE',
+#        'ICAO ID': 'PAVC',
+#        'NAS ID': 'KVC',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
+#    {
+#        'City': 'KIVALINA',
+#        'ICAO ID': 'PAVL',
+#        'NAS ID': 'KVL',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'KWETHLUK',
+#        'ICAO ID': 'PFKW',
+#        'NAS ID': 'KWT',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'KOYUKUK',
+#        'ICAO ID': 'PFKU',
+#        'NAS ID': 'KYU',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'CAPE LISBURNE LRRS',
+#        'ICAO ID': 'PALU',
+#        'NAS ID': 'LUR',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'MANOKOTAK',
+#        'ICAO ID': 'PAMB',
+#        'NAS ID': 'MBA',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'MC GRATH',
         'ICAO ID': 'PAMC',
@@ -661,13 +662,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'MARSHALL DON HUNTER SR',
-        'ICAO ID': 'PAMD',
-        'NAS ID': 'MDM',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'MARSHALL DON HUNTER SR',
+#        'ICAO ID': 'PAMD',
+#        'NAS ID': 'MDM',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'MIDDLETON ISLAND',
         'ICAO ID': 'PAMD',
@@ -675,55 +676,55 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 7
     },
-    {
-        'City': 'MINCHUMINA',
-        'ICAO ID': 'PAMH',
-        'NAS ID': 'MHM',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'MANLEY HOT SPRINGS',
-        'ICAO ID': 'PAML',
-        'NAS ID': 'MLY',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'MOUNTAIN VILLAGE',
-        'ICAO ID': 'PAMO',
-        'NAS ID': 'MOU',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'MERRILL FLD',
-        'ICAO ID': 'PAMR',
-        'NAS ID': 'MRI',
-        'Area': 'SOUTH',
-        'Sector': 6
-    },
-    {
-        'City': 'MEKORYUK',
-        'ICAO ID': 'PAMY',
-        'NAS ID': 'MYU',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'NULATO',
-        'ICAO ID': 'PANU',
-        'NAS ID': 'NUL',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'KOBUK',
-        'ICAO ID': 'PAOB',
-        'NAS ID': 'OBU',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'MINCHUMINA',
+#        'ICAO ID': 'PAMH',
+#        'NAS ID': 'MHM',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+#        'City': 'MANLEY HOT SPRINGS',
+#        'ICAO ID': 'PAML',
+#        'NAS ID': 'MLY',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+#        'City': 'MOUNTAIN VILLAGE',
+#        'ICAO ID': 'PAMO',
+#        'NAS ID': 'MOU',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'MERRILL FLD',
+#        'ICAO ID': 'PAMR',
+#        'NAS ID': 'MRI',
+#        'Area': 'SOUTH',
+#        'Sector': 6
+#    },
+#    {
+#        'City': 'MEKORYUK',
+#        'ICAO ID': 'PAMY',
+#        'NAS ID': 'MYU',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'NULATO',
+#        'ICAO ID': 'PANU',
+#        'NAS ID': 'NUL',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'KOBUK',
+#        'ICAO ID': 'PAOB',
+#        'NAS ID': 'OBU',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'NOME',
         'ICAO ID': 'PAOM',
@@ -731,13 +732,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'TOKSOOK BAY',
-        'ICAO ID': 'PAOO',
-        'NAS ID': 'OOK',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'TOKSOOK BAY',
+#        'ICAO ID': 'PAOO',
+#        'NAS ID': 'OOK',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'NORTHWAY',
         'ICAO ID': 'PAOR',
@@ -752,13 +753,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
-        'City': 'NELSON LAGOON',
-        'ICAO ID': 'PAOU',
-        'NAS ID': 'OUL',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'NELSON LAGOON',
+#        'ICAO ID': 'PAOU',
+#        'NAS ID': 'OUL',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'PALMER',
         'ICAO ID': 'PAAQ',
@@ -773,13 +774,13 @@ airport_data = [{
         'Area': 'ATOP',
         'Sector': 11
     },
-    {
-        'City': 'PERRYVILLE',
-        'ICAO ID': 'PAPE',
-        'NAS ID': 'PEV',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'PERRYVILLE',
+#        'ICAO ID': 'PAPE',
+#        'NAS ID': 'PEV',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'POINT HOPE',
         'ICAO ID': 'PAPO',
@@ -794,20 +795,20 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 4
     },
-    {
-        'City': 'NAPASKIAK',
-        'ICAO ID': 'PAPK',
-        'NAS ID': 'PKA',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
-    {
-        'City': 'PILOT POINT',
-        'ICAO ID': 'PAPN',
-        'NAS ID': 'PNP',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'NAPASKIAK',
+#        'ICAO ID': 'PAPK',
+#        'NAS ID': 'PKA',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
+#    {
+#        'City': 'PILOT POINT',
+#        'ICAO ID': 'PAPN',
+#        'NAS ID': 'PNP',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'PETERSBURG JAMES A JOHNSON',
         'ICAO ID': 'PAPG',
@@ -822,13 +823,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 9
     },
-    {
-        'City': 'PLATINUM',
-        'ICAO ID': 'PAPM',
-        'NAS ID': 'PTU',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'PLATINUM',
+#        'ICAO ID': 'PAPM',
+#        'NAS ID': 'PTU',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'RUBY',
         'ICAO ID': 'PARY',
@@ -836,13 +837,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'RUSSIAN MISSION',
-        'ICAO ID': 'PARS',
-        'NAS ID': 'RSH',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'RUSSIAN MISSION',
+#        'ICAO ID': 'PARS',
+#        'NAS ID': 'RSH',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'DEADHORSE',
         'ICAO ID': 'PASC',
@@ -864,13 +865,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 9
     },
-    {
-        'City': 'SHUNGNAK',
-        'ICAO ID': 'PAGH',
-        'NAS ID': 'SHG',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'SHUNGNAK',
+#        'ICAO ID': 'PAGH',
+#        'NAS ID': 'SHG',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'SHISHMAREF',
         'ICAO ID': 'PASH',
@@ -878,13 +879,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'SHAGELUK',
-        'ICAO ID': 'PAHX',
-        'NAS ID': 'SHX',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'SHAGELUK',
+#        'ICAO ID': 'PAHX',
+#        'NAS ID': 'SHX',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'SITKA ROCKY GUTIERREZ',
         'ICAO ID': 'PASI',
@@ -892,13 +893,13 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 8
     },
-    {
-        'City': 'SLEETMUTE',
-        'ICAO ID': 'PASL',
-        'NAS ID': 'SLQ',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'SLEETMUTE',
+#        'ICAO ID': 'PASL',
+#        'NAS ID': 'SLQ',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'ST MICHAEL',
         'ICAO ID': 'PAMK',
@@ -948,20 +949,20 @@ airport_data = [{
         'Area': 'ATOP',
         'Sector': 11
     },
-    {
-        'City': 'RALPH M CALHOUN MEML',
-        'ICAO ID': 'PATA',
-        'NAS ID': 'TAL',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
-    {
-        'City': 'TELLER',
-        'ICAO ID': 'PATE',
-        'NAS ID': 'TER',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
+#    {
+#        'City': 'RALPH M CALHOUN MEML',
+#        'ICAO ID': 'PATA',
+#        'NAS ID': 'TAL',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
+#    {
+#        'City': 'TELLER',
+#        'ICAO ID': 'PATE',
+#        'NAS ID': 'TER',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
     {
         'City': 'TALKEETNA',
         'ICAO ID': 'PATK',
@@ -969,27 +970,27 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 6
     },
-    {
-        'City': 'TATALINA',
-        'ICAO ID': 'PATL',
-        'NAS ID': 'TLJ',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'TIN CITY LRRS',
-        'ICAO ID': 'PATC',
-        'NAS ID': 'TNC',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'TOGIAK',
-        'ICAO ID': 'PATG',
-        'NAS ID': 'TOG',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
+#    {
+#        'City': 'TATALINA',
+#        'ICAO ID': 'PATL',
+#        'NAS ID': 'TLJ',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'TIN CITY LRRS',
+#        'ICAO ID': 'PATC',
+#        'NAS ID': 'TNC',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'TOGIAK',
+#        'ICAO ID': 'PATG',
+#        'NAS ID': 'TOG',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
     {
         'City': 'UGNU-KUPARUK',
         'ICAO ID': 'PAKU',
@@ -1004,13 +1005,13 @@ airport_data = [{
         'Area': 'NORTH',
         'Sector': 3
     },
-    {
-        'City': 'INDIAN MOUNTAIN LRRS',
-        'ICAO ID': 'PAIM',
-        'NAS ID': 'UTO',
-        'Area': 'NORTH',
-        'Sector': 15
-    },
+#    {
+#        'City': 'INDIAN MOUNTAIN LRRS',
+#        'ICAO ID': 'PAIM',
+#        'NAS ID': 'UTO',
+#        'Area': 'NORTH',
+#        'Sector': 15
+#    },
     {
         'City': 'CHEVAK',
         'ICAO ID': 'PAVA',
@@ -1025,19 +1026,19 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 7
     },
-    {
-        'City': 'VENETIE',
-        'ICAO ID': 'PAVE',
-        'NAS ID': 'VEE',
-        'Area': 'NORTH',
-        'Sector': 4
-    }, {
-        'City': 'BEAVER',
-        'ICAO ID': 'PAWB',
-        'NAS ID': 'WBQ',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'VENETIE',
+#        'ICAO ID': 'PAVE',
+#        'NAS ID': 'VEE',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    }, {
+#        'City': 'BEAVER',
+#        'ICAO ID': 'PAWB',
+#        'NAS ID': 'WBQ',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
 #    {
 #        'City': 'WHITTIER',
 #        'ICAO ID': 'PAWR',
@@ -1045,27 +1046,27 @@ airport_data = [{
 #        'Area': 'SOUTH',
 #        'Sector': 6
 #    },
-    {
-        'City': 'SELAWIK',
-        'ICAO ID': 'PASK',
-        'NAS ID': 'WLK',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
-    {
-        'City': 'WHITE MOUNTAIN',
-        'ICAO ID': 'PAWM',
-        'NAS ID': 'WMO',
-        'Area': 'NORTH',
-        'Sector': 3
-    },
-    {
-        'City': 'NAPAKIAK',
-        'ICAO ID': 'PANA',
-        'NAS ID': 'WNA',
-        'Area': 'NORTH',
-        'Sector': 13
-    },
+#    {
+#        'City': 'SELAWIK',
+#        'ICAO ID': 'PASK',
+#        'NAS ID': 'WLK',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
+#    {
+#        'City': 'WHITE MOUNTAIN',
+#        'ICAO ID': 'PAWM',
+#        'NAS ID': 'WMO',
+#        'Area': 'NORTH',
+#        'Sector': 3
+#    },
+#    {
+#        'City': 'NAPAKIAK',
+#        'ICAO ID': 'PANA',
+#        'NAS ID': 'WNA',
+#        'Area': 'NORTH',
+#        'Sector': 13
+#    },
     {
         'City': 'WRANGELL',
         'ICAO ID': 'PAWG',
@@ -1073,20 +1074,20 @@ airport_data = [{
         'Area': 'SOUTH',
         'Sector': 8
     },
-    {
-        'City': 'SOUTH NAKNEK NR 2',
-        'ICAO ID': 'PFWS',
-        'NAS ID': 'WSN',
-        'Area': 'NORTH',
-        'Sector': 9
-    },
-    {
-        'City': 'NOATAK',
-        'ICAO ID': 'PAWN',
-        'NAS ID': 'WTK',
-        'Area': 'NORTH',
-        'Sector': 4
-    },
+#    {
+#        'City': 'SOUTH NAKNEK NR 2',
+#        'ICAO ID': 'PFWS',
+#        'NAS ID': 'WSN',
+#        'Area': 'NORTH',
+#        'Sector': 9
+#    },
+#    {
+#        'City': 'NOATAK',
+#        'ICAO ID': 'PAWN',
+#        'NAS ID': 'WTK',
+#        'Area': 'NORTH',
+#        'Sector': 4
+#    },
     {
         'City': 'YAKUTAT',
         'ICAO ID': 'PAYA',
