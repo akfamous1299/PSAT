@@ -5,6 +5,9 @@
 name: Build and deploy Python app to Azure Web App - zan-psat
 
 on:
+  push:
+    paths:
+      'main.py'
   release:
     types: [published]
   workflow_dispatch:
