@@ -11,6 +11,7 @@ import json
 import time
 from functools import lru_cache
 from cache_utils import FileCache
+import threading
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -75,24 +76,36 @@ def get_area_data(stations: list, pireps: list, areas: list) -> dict:
 # Initialize cache with 30-second timeout
 cache = FileCache(timeout=30)
 
-def fetch_cached_data():
-    # Try to get data from cache first
-    is_valid, cached_data = cache.get()
-    if (is_valid):
-        return cached_data['stations'], cached_data['pireps']
+# Add global lock for fetch operations
+fetch_lock = threading.Lock()
 
-    # If cache miss or expired, fetch new data
-    stations = fetch_metar_data()
-    pireps = fetch_pirep_data()
-    
-    # Cache the new data
-    cache.set({
-        'stations': stations,
-        'pireps': pireps,
-        'timestamp': datetime.now(pytz.utc).isoformat()
-    })
-    
-    return stations, pireps
+def fetch_cached_data():
+    global fetch_lock
+    with fetch_lock:  # Add global lock for entire fetch operation
+        # Try to get data from cache first
+        is_valid, cached_data = cache.get()
+        if (is_valid):
+            app.logger.info("Using cached data")  # Changed from debug to info
+            return cached_data['stations'], cached_data['pireps']
+
+        # If cache miss or expired, fetch new data
+        app.logger.info("Cache miss or expired, fetching fresh data from APIs...")
+        try:
+            stations = fetch_metar_data()
+            pireps = fetch_pirep_data()
+            
+            # Cache the new data
+            cache.set({
+                'stations': stations,
+                'pireps': pireps,
+                'timestamp': datetime.now(pytz.utc).isoformat()
+            })
+            app.logger.info("Cache updated with fresh data")
+            return stations, pireps
+            
+        except Exception as e:
+            app.logger.error(f"Error during data fetch: {e}")
+            raise
 
 # Add connection counter
 active_connections = 0
@@ -117,6 +130,7 @@ def stream():
                         'zulu_time': zulu_time,
                         'areas_data': areas_data
                     }
+                    app.logger.info(f'Data sent to client from stream')
                     
                     yield f"data: {json.dumps(data)}\n\n"
                     
