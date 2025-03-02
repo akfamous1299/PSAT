@@ -84,11 +84,11 @@ def fetch_cached_data():
         # Try to get data from cache first
         is_valid, cached_data = cache.get()
         if (is_valid):
-            app.logger.info("Using cached data")  # Changed from debug to info
+            app.logger.debug("Using cached data")  # Changed from debug to info
             return cached_data['stations'], cached_data['pireps']
 
         # If cache miss or expired, fetch new data
-        app.logger.info("Cache miss or expired, fetching fresh data from APIs...")
+        app.logger.debug("Cache miss or expired, fetching fresh data from APIs...")
         try:
             stations = fetch_metar_data()
             pireps = fetch_pirep_data()
@@ -99,7 +99,7 @@ def fetch_cached_data():
                 'pireps': pireps,
                 'timestamp': datetime.now(pytz.utc).isoformat()
             })
-            app.logger.info("Cache updated with fresh data")
+            app.logger.debug("Cache updated with fresh data")
             return stations, pireps
             
         except Exception as e:
@@ -129,7 +129,7 @@ def stream():
                         'zulu_time': zulu_time,
                         'areas_data': areas_data
                     }
-                    app.logger.info(f'Data sent to client from stream')
+                    app.logger.debug(f'Data sent to client from stream')
                     
                     yield f"data: {json.dumps(data)}\n\n"
                     
@@ -162,7 +162,7 @@ def index():
         areas_data = get_area_data(stations, pireps, areas)
         now = datetime.now(pytz.utc)
         zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-        app.logger.info('Index page accessed successfully')
+        #app.logger.info('Index page accessed successfully')
         return render_template('index.html', areas_data=areas_data, zulu_time=zulu_time)
     except Exception as e:
         app.logger.error(f'Error in index route: {str(e)}')
@@ -177,7 +177,7 @@ def fetch_updated_data(page):
         areas_data = get_area_data(stations, pireps, areas)
         now = datetime.now(pytz.utc)
         zulu_time = now.strftime("%Y-%m-%d %H:%M Z")
-        app.logger.info(f'Data updated successfully for page: {page}')
+        app.logger.info(f'fetch-updated-data called for page: {page}')
         return {
             'zulu_time': zulu_time,
             'areas_data': areas_data

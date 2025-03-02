@@ -10,6 +10,8 @@ from typing import Tuple, Any
 logger = logging.getLogger(__name__)
 
 class FileCache:
+    _cache_initialized = False  # Class variable to track initialization
+
     def __init__(self, cache_dir: str = None, timeout: int = 5):
         """
         Initialize the file cache system
@@ -22,7 +24,11 @@ class FileCache:
         
         # Ensure cache directory exists
         os.makedirs(self.cache_dir, exist_ok=True)
-        logger.info(f"Cache directory: {self.cache_dir}")
+
+        # Log cache directory only once per process
+        if not FileCache._cache_initialized:
+            logger.info(f"Cache directory initialized: {self.cache_dir}")
+            FileCache._cache_initialized = True
 
     def _get_cache_file(self) -> str:
         return os.path.join(self.cache_dir, 'psat_data.json')
