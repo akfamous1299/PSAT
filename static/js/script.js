@@ -55,60 +55,55 @@ function updateBlockContainer(areaData, area) {
         console.error('Invalid area data');
         return;
     }
-    console.log('Updating block container via SSE');  // Debug log to confirm SSE updates
-    const blockContainer = document.querySelector('.block-container');
-    blockContainer.innerHTML = '';
 
-    // Create containers for split left and right
-    const leftContainer = document.createElement('div');
-    leftContainer.className = 'split left';
-    leftContainer.innerHTML = `<h3>${area} Area (Left)</h3>`;
+    // Get existing containers
+    const leftContainer = document.querySelector('.split.left .block-container');
+    const rightContainer = document.querySelector('.split.right .block-container');
 
-    const rightContainer = document.createElement('div');
-    rightContainer.className = 'split right';
-    rightContainer.innerHTML = `<h3>${area} Area (Right)</h3>`;
+    if (!leftContainer || !rightContainer) {
+        console.error('Container elements not found');
+        return;
+    }
 
-    const leftSectors = [5, 6, 4, 15, 16];
-    const rightSectors = [3, 9, 13, 7, 8];
+    // Clear existing blocks
+    leftContainer.innerHTML = '';
+    rightContainer.innerHTML = '';
 
+    // Define sectors based on area
+    let leftSectors, rightSectors;
+    if (area === 'NORTH') {
+        leftSectors = [4, 15, 16];
+        rightSectors = [3, 9, 13];
+    } else if (area === 'SOUTH') {
+        leftSectors = [5, 6];
+        rightSectors = [7, 8];
+    }
+
+    // Update blocks in their respective containers
     for (const nasId in areaData) {
         const pirepStatus = areaData[nasId].Status;
         let blockClass = '';
-        let title = '';
-        //console.log(pirepStatus)
 
-        // Determine block color and title based on status
         if (pirepStatus === 'Within 45 mins') {
             blockClass = 'green';
-            title = pirepStatus;
         } else if (pirepStatus === 'Within 60 mins') {
             blockClass = 'yellow';
-            title = pirepStatus;
         } else {
             blockClass = 'red';
-            title = pirepStatus;
         }
 
-        // Create the block element
         const blockHtml = `
-            <div class="block ${blockClass}" title="${title}">
+            <div class="block ${blockClass}" title="${pirepStatus}">
                 <b>${nasId}</b>
             </div>
         `;
 
-        // Append the block to the appropriate split container
-
-        if (leftSectors.includes(areaData[nasId].Sector)) { // Example condition for Left or Right
+        if (leftSectors.includes(areaData[nasId].Sector)) {
             leftContainer.innerHTML += blockHtml;
         } else if (rightSectors.includes(areaData[nasId].Sector)) {
             rightContainer.innerHTML += blockHtml;
         }
     }
-
-    // Append split containers to the main block container
-    blockContainer.appendChild(leftContainer);
-    blockContainer.appendChild(rightContainer);
-    //console.log("updated blocks")
 }
 
 function showError(message) {
@@ -138,16 +133,16 @@ function setupEventSource() {
             eventSource.close();
         }
 
-        console.log('Setting up EventSource connection...');  // Debug log
+        //console.log('Setting up EventSource connection...');  // Debug log
         eventSource = new EventSource('/stream');
 
         eventSource.onmessage = function (event) {
-            console.log('Received SSE message');  // Debug log
+            //console.log('Received SSE message');  // Debug log
             try {
                 const data = JSON.parse(event.data);
 
                 if (data.reconnect) {
-                    console.log('Server requested reconnection');
+                    //console.log('Server requested reconnection');
                     setTimeout(connect, 1000);
                     return;
                 }
@@ -190,7 +185,7 @@ function updateBlockPage(areasData, currentPage) {
     try {
         const area = currentPage.split('-')[2];
         if (areasData[area] && areasData[area].pirep_status) {
-            console.log(`Updating blocks for ${area}:`, areasData[area].pirep_status);
+            //console.log(`Updating blocks for ${area}:`, areasData[area].pirep_status);
             updateBlockContainer(areasData[area].pirep_status, area);
         } else {
             console.error(`No data found for area: ${area}`);
@@ -219,13 +214,13 @@ function updateAreaPage(areasData, currentPage) {
 
 // Separate UI update logic for better organization
 function updateUI(data) {
-    console.log('Received data:', data); // Debug log
+    //console.log('Received data:', data); // Debug log
 
     // Update the time regardless of page
     updateZuluTime(data.zulu_time);
 
     const currentPage = getCurrentPage();
-    console.log('Current page:', currentPage); // Debug log
+    //console.log('Current page:', currentPage); // Debug log
 
     try {
         if (currentPage === "index") {
@@ -303,7 +298,7 @@ document.addEventListener('DOMContentLoaded', setupEventSource);
 // Add debug logging to the getCurrentPage function
 function getCurrentPage() {
     const currentUrl = window.location.pathname;
-    console.log('Current URL:', currentUrl);  // Debug log
+    //console.log('Current URL:', currentUrl);  // Debug log
 
     // Remove trailing slash if present
     const cleanUrl = currentUrl.endsWith('/') ? currentUrl.slice(0, -1) : currentUrl;
@@ -315,12 +310,12 @@ function getCurrentPage() {
         page = cleanUrl.slice(1); // Include 'area/' in the return
     } else if (cleanUrl.startsWith('/area-block/')) {
         page = 'area-block-' + cleanUrl.split('/').pop();
-        console.log('Area block page detected:', page);  // Debug log
+        //console.log('Area block page detected:', page);  // Debug log
     } else {
         page = cleanUrl.slice(1);
     }
 
-    console.log('Resolved page:', page);  // Debug log
+    //console.log('Resolved page:', page);  // Debug log
     return page;
 }
 

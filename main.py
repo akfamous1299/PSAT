@@ -21,7 +21,7 @@ handler.setFormatter(logging.Formatter(
     '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
 ))
 app.logger.addHandler(handler)
-app.logger.setLevel(logging.DEBUG)
+app.logger.setLevel(logging.INFO)  # Changed from DEBUG to INFO
 
 def get_area_data(stations: list, pireps: list, areas: list) -> dict:
     if not hasattr(config, 'priority_lists') or not hasattr(config, 'airport_data'):
@@ -32,7 +32,7 @@ def get_area_data(stations: list, pireps: list, areas: list) -> dict:
     for area in areas:
         area_priority = config.priority_lists.get(area, [])
         area_stations = [ (airport, station) for station in stations for airport in config.airport_data if airport['ICAO ID'] == station['station_id'] and airport['Area'] == area ]
-        area_stations.sort(key=lambda x: area_priority.index(x[0]['NAS ID']) if x[0]['NAS ID'] in area_priority else len(area_priority))
+        area_stations.sort(key=lambda x: (area_priority.index(x[0]['NAS ID']) if x[0]['NAS ID'] in area_priority else len(area_priority), x[0]['NAS ID']))
         area_pireps = [pirep for pirep in pireps if pirep['Area'] == area]
         station_pirep_status = {}
         for station in area_stations:
@@ -80,28 +80,23 @@ fetch_lock = threading.Lock()
 
 def fetch_cached_data():
     global fetch_lock
-    with fetch_lock:  # Add global lock for entire fetch operation
-        # Try to get data from cache first
+    with fetch_lock:
         is_valid, cached_data = cache.get()
         if (is_valid):
-            app.logger.debug("Using cached data")  # Changed from debug to info
+            #app.logger.debug("Using cached data")
             return cached_data['stations'], cached_data['pireps']
 
-        # If cache miss or expired, fetch new data
-        app.logger.debug("Cache miss or expired, fetching fresh data from APIs...")
+        #app.logger.debug("Cache miss or expired, fetching fresh data from APIs...")
         try:
             stations = fetch_metar_data()
             pireps = fetch_pirep_data()
-            
-            # Cache the new data
             cache.set({
                 'stations': stations,
                 'pireps': pireps,
                 'timestamp': datetime.now(pytz.utc).isoformat()
             })
-            app.logger.debug("Cache updated with fresh data")
+            #app.logger.debug("Cache updated with fresh data")
             return stations, pireps
-            
         except Exception as e:
             app.logger.error(f"Error during data fetch: {e}")
             raise
@@ -114,7 +109,6 @@ def stream():
     def generate():
         global active_connections
         active_connections += 1
-        app.logger.info(f'New connection established. Active connections: {active_connections}')
         
         try:
             while True:
@@ -129,20 +123,16 @@ def stream():
                         'zulu_time': zulu_time,
                         'areas_data': areas_data
                     }
-                    app.logger.debug(f'Data sent to client from stream')
                     
                     yield f"data: {json.dumps(data)}\n\n"
-                    
-                    time.sleep(5)  # Wait 5 seconds before next update
+                    time.sleep(5)
                     
                 except Exception as e:
                     app.logger.error(f'Stream error: {str(e)}')
                     yield f"data: {json.dumps({'error': str(e)})}\n\n"
                     time.sleep(5)
         finally:
-            # Cleanup when client disconnects
             active_connections -= 1
-            app.logger.info(f'Connection closed. Active connections: {active_connections}')
     
     return Response(
         stream_with_context(generate()),
