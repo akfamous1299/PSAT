@@ -21,7 +21,7 @@ handler.setFormatter(logging.Formatter(
     '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
 ))
 app.logger.addHandler(handler)
-app.logger.setLevel(logging.INFO)
+app.logger.setLevel(logging.DEBUG)
 
 def get_area_data(stations: list, pireps: list, areas: list) -> dict:
     if not hasattr(config, 'priority_lists') or not hasattr(config, 'airport_data'):
@@ -37,7 +37,7 @@ def get_area_data(stations: list, pireps: list, areas: list) -> dict:
         station_pirep_status = {}
         for station in area_stations:
             station_pireps = [pirep for pirep in area_pireps 
-                            if pirep['Location'] == station[0]['NAS ID'] and 
+                            if pirep['APT'] == station[0]['NAS ID'] and 
                                (pirep['ALT'] <= station[1]['elevation'] + 10000 or 
                                 'DURC' in pirep['PIREP Text'] or 
                                 'DURD' in pirep['PIREP Text'])]
@@ -73,7 +73,7 @@ def get_area_data(stations: list, pireps: list, areas: list) -> dict:
     return areas_data
 
 # Initialize cache with 30-second timeout
-cache = FileCache(timeout=30)
+cache = FileCache(timeout=60)
 
 # Add global lock for fetch operations
 fetch_lock = threading.Lock()

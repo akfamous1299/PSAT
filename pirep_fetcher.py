@@ -1,11 +1,22 @@
+import logging
+from logging.handlers import RotatingFileHandler
 from datetime import datetime
 import xml.etree.ElementTree as ET
 import pytz
-
 import requests
 from shapely.geometry import Point, Polygon
-
 import config
+
+# Setup logging
+logger = logging.getLogger(__name__)
+logger.setLevel(logging.DEBUG)
+handler = RotatingFileHandler('pirep_fetcher.log', maxBytes=10000, backupCount=3)
+handler.setFormatter(logging.Formatter(
+    '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+))
+
+logger.addHandler(handler)
+logger.setLevel(logging.DEBUG)
 
 def point_in_polygon(lat, lon, polygon):
     shapely_polygon = Polygon(polygon)
@@ -43,7 +54,6 @@ def find_polygons(lat, lon, alt):
                 area = area_name
                 break
             
-    #print(found_poly)        
 
     return found_poly
 
@@ -113,17 +123,31 @@ def fetch_pirep_data():
     :return: List of PIREPs with relevant information
     """
     url = config.get_pirep_url()
-    response = requests.get(url)
-    response_pasy = requests.get(config.pasy_url)
-
-    if response.status_code != 200 or response_pasy.status_code != 200:
-        print("Failed to fetch PIREP data.")
-        return []
-
+    pasy_url = config.pasy_url
+    
+    logger.debug(f"Fetching PIREP data from: {url}")
+    logger.debug(f"Fetching PASY data from: {pasy_url}")
+    
     try:
+        response = requests.get(url)
+        response_pasy = requests.get(pasy_url)
+        
+        logger.debug(f"Main PIREP API Status Code: {response.status_code}")
+        logger.debug(f"PASY API Status Code: {response_pasy.status_code}")
+        
+        if response.status_code != 200 or response_pasy.status_code != 200:
+            logger.error("Failed to fetch PIREP data")
+            return []
+
         # Parse XML responses
         root = ET.fromstring(response.text)
         root_pasy = ET.fromstring(response_pasy.text)
+        
+        main_pirep_count = len(root.findall(".//AircraftReport"))
+        pasy_pirep_count = len(root_pasy.findall(".//AircraftReport"))
+        
+        logger.debug(f"Main PIREP count: {main_pirep_count}")
+        logger.debug(f"PASY PIREP count: {pasy_pirep_count}")
         
         # Combine PIREP data from both sources
         pireps = []
@@ -139,11 +163,13 @@ def fetch_pirep_data():
                     observation_time = pirep.find("observation_time").text
                     report_type = pirep.find("report_type").text if pirep.find("report_type") is not None else ""
                     aircraft_ref = pirep.find("aircraft_ref").text if pirep.find("aircraft_ref") is not None else ""
-
+                    
                     # Extract additional info
                     apt = extract_apt(raw_text)
                     rmk = extract_rmk(raw_text)
                     loc = extract_loc(raw_text)
+
+                    logger.debug(f"Processing PIREP - Time: {observation_time}, METAR SITE {apt}, Alt: {alt}")
 
                     # Find sector
                     sector_number = find_polygons(lat, lon, alt)
@@ -177,14 +203,20 @@ def fetch_pirep_data():
                             })
 
                 except (ValueError, AttributeError) as e:
-                    print(f"Error processing PIREP: {e}")
+                    logger.error(f"Error processing PIREP: {e}")
+                    logger.error(f"Problematic PIREP data: {ET.tostring(pirep, encoding='unicode')}")
                     continue
 
+        logger.debug(f"Total processed PIREPs: {len(pireps)}")
+        # Log a sample of processed PIREPs for verification
+        if pireps:
+            logger.debug(f"Sample PIREP (first entry): {pireps[0]}")
+            
         return pireps
 
     except ET.ParseError as e:
-        print(f"Failed to parse XML: {e}")
+        logger.error(f"Failed to parse XML: {e}")
         return []
     except Exception as e:
-        print(f"Unexpected error: {e}")
+        logger.error(f"Unexpected error in fetch_pirep_data: {e}", exc_info=True)
         return []

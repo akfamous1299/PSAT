@@ -1113,7 +1113,7 @@ def get_pirep_url():
         maxlon=pirep_config["MaxLon"]
     )
 
-pasy_url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow=1&format=xml&boundingBox=45%2C%20159%2C%2055%2C%20179"
+pasy_url = "https://aviationweather.gov/api/data/dataserver?requestType=retrieve&dataSource=aircraftreports&hoursBeforeNow=2&format=xml&boundingBox=45%2C%20159%2C%2055%2C%20179"
 
 areas = {
     "NORTH": {

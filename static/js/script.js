@@ -39,7 +39,7 @@ function updatePirepTable(pireps) {
     pireps.forEach(pirep => {
         const row = `
             <tr>
-                <td>${pirep['Location']}</td>
+                <td>${pirep['APT']}</td>
                 <td>${pirep['Time']}</td>
                 <td>${pirep['Type']}</td>
                 <td>${pirep['PIREP Text']}</td>
